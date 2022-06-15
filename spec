@@ -10471,3 +10471,17 @@ beginseg
     romalign 0x1000
     include "build/baserom/softsprite_matrix_static.o"
 endseg
+
+beginseg
+    name "learning01_scene"
+    romalign 0x1000
+    include "build/assets/scenes/overworld/learning01/learning01_scene.o"
+    number 2
+endseg
+
+beginseg
+    name "learning01_room_0"
+    romalign 0x1000
+    include "build/assets/scenes/overworld/learning01/learning01_room_0.o"
+    number 3
+endseg

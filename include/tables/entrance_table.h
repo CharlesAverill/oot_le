@@ -9,10 +9,10 @@
  *    - Argument 5: Toggle if a title card should display when using this entrance (true or false)
  *    - Argument 6: Transition type when entering using this entrance
  *    - Argument 7: Transition type when exiting using this entrance
- * 
+ *
  * WARNING: Due to how the entrance system is implemented, entries within the same group of scene setups are NOT shiftable.
  *          Groups of scene setups are indicated by line breaks.
- * 
+ *
  *          Only the first entrance within a group of setups is expected to be referenced in code.
  *          The entrance system will apply the offset on its own to access the correct entrance for a given setup.
  */
