@@ -44,6 +44,8 @@ void Select_LoadGame(SelectContext* this, s32 entranceIndex) {
 
 // "Translation" (Actual name)
 static SceneSelectEntry sScenes[] = {
+    // Learning Scenes
+    { " 0: Learning01", Select_LoadGame, ENTR_LRN01 },
     // "1: SPOT00" (Hyrule Field)
     { " 1:SPOT00 (Hyrule Field)", Select_LoadGame, ENTR_SPOT00_0 },
     // "2: SPOT01" (Kakariko Village)
@@ -295,8 +297,6 @@ static SceneSelectEntry sScenes[] = {
     { "124: TEST - Depth Test", Select_LoadGame, ENTR_DEPTH_TEST_0 },
     // "125: Hyrule Garden Game 2" (Early Hyrule Garden Game)
     { "125: TEST - Early Hyrule Garden Game", Select_LoadGame, ENTR_HAIRAL_NIWA2_0 },
-    // Learning Scenes
-    { "M-6: Learning01", Select_LoadGame, ENTR_LRN01 },
     // "title" (Title Screen)
     { "title", (void*)Select_LoadTitle, 0 },
 };

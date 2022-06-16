@@ -363,6 +363,8 @@ u16 func_80B61024(PlayState* play, Actor* thisx) {
     }
 
     switch (thisx->params & 0x3F) {
+        case 9:
+            return 0x71B3;
         case 8:
             if (GET_EVENTCHKINF(EVENTCHKINF_30)) {
                 return 0x402A;
