@@ -352,14 +352,15 @@ void Fault_Sleep(u32 msec) {
     Fault_SleepImpl(msec);
 }
 
-void PadMgr_RequestPadData(Input* input, s32 mode);
+void PadMgr_RequestPadData(PadMgr *padmgr, Input* input, s32 mode);
 
 void Fault_PadCallback(Input* input) {
     //! @bug This function is not called correctly, it is missing a leading PadMgr* argument. This
     //! renders the crash screen unusable.
     //! In Majora's Mask, PadMgr functions were changed to not require this argument, and this was
     //! likely just not addressed when backporting.
-    PadMgr_RequestPadData(input, 0);
+    // PadMgr_RequestPadData(input, 0);
+    PadMgr_RequestPadData(&gPadMgr,input, 0);
 }
 
 void Fault_UpdatePadImpl(void) {
@@ -642,7 +643,7 @@ void Fault_Wait5Seconds(void) {
         Fault_Sleep(1000 / 60);
     } while ((osGetTime() - start) < OS_SEC_TO_CYCLES(5) + 1);
 
-    sFaultInstance->autoScroll = true;
+    sFaultInstance->autoScroll = false;
 }
 
 /**
@@ -932,7 +933,7 @@ void Fault_DrawMemDump(uintptr_t pc, uintptr_t sp, uintptr_t cLeftJump, uintptr_
     } while (!CHECK_BTN_ALL(input->press.button, BTN_L));
 
     // Resume auto-scroll and move to next page
-    sFaultInstance->autoScroll = true;
+    sFaultInstance->autoScroll = false;
 }
 
 /**
@@ -1206,7 +1207,7 @@ void Fault_ThreadEntry(void* arg) {
         } else {
             // Draw error bar signifying the crash screen is available
             Fault_DrawCornerRec(GPACK_RGBA5551(255, 0, 0, 1));
-            Fault_WaitForButtonCombo();
+            //Fault_WaitForButtonCombo();
         }
 
         // Set auto-scrolling and default colors
