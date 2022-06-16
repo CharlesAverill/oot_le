@@ -295,6 +295,8 @@ static SceneSelectEntry sScenes[] = {
     { "124: TEST - Depth Test", Select_LoadGame, ENTR_DEPTH_TEST_0 },
     // "125: Hyrule Garden Game 2" (Early Hyrule Garden Game)
     { "125: TEST - Early Hyrule Garden Game", Select_LoadGame, ENTR_HAIRAL_NIWA2_0 },
+    // Learning Scenes
+    { "M-6: Learning01", Select_LoadGame, ENTR_LRN01 },
     // "title" (Title Screen)
     { "title", (void*)Select_LoadTitle, 0 },
 };
