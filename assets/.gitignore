@@ -1,8 +1,8 @@
 *.bin
 *.c
 !text/*.c
-!scenes/overworld/learning01/*
 *.h
 *.cfg
 *.vtx.inc
 *.dlist.inc
+!scenes/overworld/learning01/*
