@@ -1,4 +1,8 @@
-# The Legend of Zelda: Ocarina of Time
+# The Legend of Zelda: Ocarina of Time - Legendary Edition
+
+## Note from Charles
+
+This hack intends to add in story elements from the [Legend of Zelda - Ocarina of Time manga by Akira Himekawa](https://archive.org/details/oot_rinoa). Some story elements will not be used, and some extra stuff will be done because I feel like it. Check out [the differences page](DIFFERENCES.md) for a list of my planned updates.
 
 [![Build Status][jenkins-badge]][jenkins] [![Decompilation Progress][progress-badge]][progress] [![Contributors][contributors-badge]][contributors] [![Discord Channel][discord-badge]][discord]
 
