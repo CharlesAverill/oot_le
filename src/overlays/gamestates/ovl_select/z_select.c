@@ -91,7 +91,7 @@ static SceneSelectEntry sScenes[] = {
     // "22: Target Range" (Shooting Gallery)
     { "22: Shooting Gallery", Select_LoadGame, ENTR_SYATEKIJYOU_0 },
     // "23: Hyrule Garden Game" (Hyrule Garden Minigame)
-    { "23: Hyrule Garden Minigame" GFXP_HIRAGANA "ﾆﾜ" GFXP_KATAKANA "ｹﾞｰﾑ", Select_LoadGame, ENTR_HAIRAL_NIWA_0 },
+    { "23: Hyrule Garden Minigame", Select_LoadGame, ENTR_HAIRAL_NIWA_0 },
     // "24: Grave Dive Hole" (Grave (Redead))
     { "24: Grave (Redead)", Select_LoadGame, ENTR_HAKAANA_0 },
     // "25: Grave Dive Hole 2" (Grave (Fairy's Fountain))

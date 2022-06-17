@@ -1,6 +1,7 @@
 *.bin
 *.c
 !text/*.c
+!scenes/overworld/learning01/*
 *.h
 *.cfg
 *.vtx.inc
