@@ -1,4 +1,4 @@
-# The Legend of Zelda: Ocarina of Time - Legendary Edition
+#The Legend of Zelda : Ocarina of Time - Legendary Edition
 
 ## Note from Charles
 

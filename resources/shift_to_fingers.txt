@@ -1,0 +1,4 @@
+On 1152x864:
+- 0x00 ~ 2 index fingers
+- 0x3c ~ 4 index fingers
+- 0x2d ~ 3.5 index fingers

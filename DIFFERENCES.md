@@ -1,4 +1,4 @@
-# Differences
+#Differences
 
 | Change from base game | Status |
 | --------------------- | ------ |

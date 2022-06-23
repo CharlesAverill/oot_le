@@ -6,6 +6,7 @@
 
 #include "z_en_md.h"
 #include "assets/objects/object_md/object_md.h"
+#include "assets/objects/gameplay_keep/gameplay_keep.h"
 #include "overlays/actors/ovl_En_Elf/z_en_elf.h"
 
 #define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_3 | ACTOR_FLAG_4 | ACTOR_FLAG_25)
@@ -50,10 +51,11 @@ static ColliderCylinderInit sCylinderInit = {
         BUMP_NONE,
         OCELEM_ON,
     },
-    { 36, 46, 0, { 0, 0, 0 } },
+    { 26, 64, 0, { 0, 0, 0 } },
 };
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
+static CollisionCheckInfoInit2 sColChkInfoInit_Follower = { 0, 0, 0, 0, MASS_HEAVY };
 
 typedef enum {
     /*  0 */ ENMD_ANIM_0,
@@ -64,12 +66,13 @@ typedef enum {
     /*  5 */ ENMD_ANIM_5,
     /*  6 */ ENMD_ANIM_6,
     /*  7 */ ENMD_ANIM_7,
-    /*  8 */ ENMD_ANIM_8,
+    /*  8 */ ENMD_ANIM_WALK,
     /*  9 */ ENMD_ANIM_9,
     /* 10 */ ENMD_ANIM_10,
     /* 11 */ ENMD_ANIM_11,
     /* 12 */ ENMD_ANIM_12,
-    /* 13 */ ENMD_ANIM_13
+    /* 13 */ ENMD_ANIM_13,
+    /* 14 */ ENMD_ANIM_WALKFAST
 } EnMdAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -87,6 +90,7 @@ static AnimationInfo sAnimationInfo[] = {
     { &gMidoSlamAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -1.0f },
     { &gMidoRaiseHand2Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -1.0f },
     { &gMidoAngryHeadTurnAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -1.0f },
+    { &gMidoWalkingAnim, 3.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -1.0f },
 };
 
 void func_80AAA250(EnMd* this) {
@@ -146,7 +150,7 @@ void func_80AAA39C(EnMd* this) {
             FALLTHROUGH;
         case 2:
             if (Animation_OnFrame(&this->skelAnime, this->skelAnime.endFrame)) {
-                Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_8);
+                Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_WALK);
                 this->unk_20A++;
             }
             break;
@@ -282,6 +286,10 @@ void func_80AAA92C(EnMd* this, u8 arg1) {
 }
 
 void func_80AAA93C(EnMd* this) {
+    if(this->isFollowing && this->actor.speedXZ != 0.0f) {
+        return;
+    }
+
     switch (this->unk_20B) {
         case 1:
             func_80AAA274(this);
@@ -362,7 +370,7 @@ void func_80AAAA24(EnMd* this) {
                 }
                 break;
         }
-    } else if (this->skelAnime.animation != &gMidoHandsOnHipsIdleAnim) {
+    } else if (this->skelAnime.animation != &gMidoHandsOnHipsIdleAnim && this->actor.params != 1 && this->actor.params != 2) {
         Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
         func_80AAA92C(this, 0);
     }
@@ -450,6 +458,10 @@ u16 EnMd_GetTextLostWoods(PlayState* play, EnMd* this) {
 u16 EnMd_GetText(PlayState* play, Actor* thisx) {
     EnMd* this = (EnMd*)thisx;
 
+    if(thisx->params == 1) {
+        return 0x71B5;
+    }
+
     switch (play->sceneNum) {
         case SCENE_SPOT04:
             return EnMd_GetTextKokiriForest(play, this);
@@ -458,7 +470,7 @@ u16 EnMd_GetText(PlayState* play, Actor* thisx) {
         case SCENE_SPOT10:
             return EnMd_GetTextLostWoods(play, this);
         default:
-            return 0;
+            return 0x71B5;
     }
 }
 
@@ -519,7 +531,7 @@ u8 EnMd_ShouldSpawn(EnMd* this, PlayState* play) {
         }
     }
 
-    if (play->sceneNum == SCENE_SPOT10) {
+    if (play->sceneNum == SCENE_SPOT10 || play->sceneNum == SCENE_LEARNING01) {
         return 1;
     }
 
@@ -579,8 +591,22 @@ void func_80AAB158(EnMd* this, PlayState* play) {
     func_80034A14(&this->actor, &this->unk_1E0, 2, temp);
     if (this->actionFunc != func_80AABC10) {
         if (temp2) {
-            func_800343CC(play, &this->actor, &this->unk_1E0.unk_00, this->collider.dim.radius + 30.0f, EnMd_GetText,
-                          func_80AAAF04);
+            if(this->actor.params == 1 || this->actor.params == 2) {
+                if (Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE && Message_ShouldAdvance(play)) {
+                    switch (play->msgCtx.choiceIndex) {
+                        case 0: // Yes
+                            this->isFollowing = true;
+                            break;
+                        case 1: // No
+                            this->isFollowing = false;
+                            break;
+                        Message_CloseTextbox(play);
+                    }
+                } else {
+                    func_800343CC(play, &this->actor, &this->unk_1E0.unk_00, this->collider.dim.radius + 30.0f, EnMd_GetText,
+                                  func_80AAAF04);
+                }
+            }
         }
     }
 }
@@ -591,7 +617,7 @@ u8 EnMd_FollowPath(EnMd* this, PlayState* play) {
     f32 pathDiffX;
     f32 pathDiffZ;
 
-    if ((this->actor.params & 0xFF00) == 0xFF00) {
+    if ((this->actor.params & 0xFF00) == 0xFF00 || this->actor.params == 1 || this->actor.params == 2) {
         return 0;
     }
 
@@ -618,7 +644,7 @@ u8 EnMd_SetMovedPos(EnMd* this, PlayState* play) {
     Path* path;
     Vec3s* lastPointPos;
 
-    if ((this->actor.params & 0xFF00) == 0xFF00) {
+    if ((this->actor.params & 0xFF00) == 0xFF00 || this->actor.params == 1 || this->actor.params == 2) {
         return 0;
     }
 
@@ -658,11 +684,15 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, this->actor.params == 1 || this->actor.params == 2 ?
+        &sColChkInfoInit_Follower : &sColChkInfoInit);
     if (!EnMd_ShouldSpawn(this, play)) {
         Actor_Kill(&this->actor);
         return;
     }
+
+    this->isFollowing = this->actor.params == 2;
+    this->teleportTimer = -1;
 
     Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_0);
     Actor_SetScale(&this->actor, 0.01f);
@@ -674,7 +704,8 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
     if (((play->sceneNum == SCENE_SPOT04) && !GET_EVENTCHKINF(EVENTCHKINF_04)) ||
         ((play->sceneNum == SCENE_SPOT04) && GET_EVENTCHKINF(EVENTCHKINF_04) &&
          CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD)) ||
-        ((play->sceneNum == SCENE_SPOT10) && !GET_EVENTCHKINF(EVENTCHKINF_0A))) {
+        ((play->sceneNum == SCENE_SPOT10) && !GET_EVENTCHKINF(EVENTCHKINF_0A)) ||
+        this->actor.params == 1 || this->actor.params == 2) {
         this->actor.home.pos = this->actor.world.pos;
         this->actionFunc = func_80AAB948;
         return;
@@ -715,44 +746,113 @@ void func_80AAB948(EnMd* this, PlayState* play) {
     Actor* actorToBlock = &GET_PLAYER(play)->actor;
     s16 yaw;
 
+    EnMdAnimation targetAnim;
+    bool isRunning;
+
+    float xt, zt;
+
     func_80AAAA24(this);
 
-    if (this->unk_1E0.unk_00 == 0) {
+    // Follow Link
+    if (this->isFollowing) {
+        this->actor.gravity = -2.0f;
+
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
         this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
 
-        yaw = Math_Vec3f_Yaw(&this->actor.home.pos, &actorToBlock->world.pos);
-
-        this->actor.world.pos.x = this->actor.home.pos.x;
-        this->actor.world.pos.x += 60.0f * Math_SinS(yaw);
-
-        this->actor.world.pos.z = this->actor.home.pos.z;
-        this->actor.world.pos.z += 60.0f * Math_CosS(yaw);
-
-        temp = fabsf((f32)this->actor.yawTowardsPlayer - yaw) * 0.001f * 3.0f;
-        this->skelAnime.playSpeed = CLAMP(temp, 1.0f, 3.0f);
-    }
-
-    if (this->unk_1E0.unk_00 == 2) {
-        if (CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD) && !GET_EVENTCHKINF(EVENTCHKINF_1C) &&
-            (play->sceneNum == SCENE_SPOT04)) {
-            play->msgCtx.msgMode = MSGMODE_PAUSED;
+        // If y dist is big and player isn't climbing
+        if(this->actor.yDistToPlayer > 100 && !(player->stateFlags1 & PLAYER_STATE1_21)) {
+            if(this->teleportTimer == -1) {
+                this->teleportTimer = 30;
+            } else if(this->teleportTimer == 1) {
+                this->actor.world.pos = player->actor.world.pos;
+                this->teleportTimer = -1;
+            } else {
+                this->teleportTimer--;
+            }
         }
 
-        if (play->sceneNum == SCENE_SPOT04) {
-            SET_EVENTCHKINF(EVENTCHKINF_04);
+        if(this->actor.xzDistToPlayer > 200) {
+            Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
+            //this->actor.world.pos = player->actor.world.pos;
+            // Travel along path to player until within stopping distance
+            xt = this->actor.world.pos.x;
+            zt = this->actor.world.pos.z;
+
+            /*
+            do {
+                xt = (player->actor.world.pos.x + xt) / 2;
+                zt = (player->actor.world.pos.z + zt) / 2;
+
+                tdist = (player->actor.world.pos.x - xt) * (player->actor.world.pos.x - xt) *
+                        (player->actor.world.pos.z - zt) * (player->actor.world.pos.z - zt);
+            } while (tdist > 6400);
+            */
+
+            xt = (player->actor.world.pos.x + xt) / 2;
+            zt = (player->actor.world.pos.z + zt) / 2;
+
+            this->actor.world.pos.x = xt;
+            this->actor.world.pos.z = zt;
+        } else {
+            this->actor.speedXZ = 0.0f;
+
+            if(this->actor.xzDistToPlayer > 100) {
+                this->actor.speedXZ = 5.0f;
+                targetAnim = ENMD_ANIM_WALKFAST;
+                isRunning = true;
+            } else if(this->actor.xzDistToPlayer > 80) {
+                this->actor.speedXZ = 2.0f;
+                targetAnim = ENMD_ANIM_WALK;
+                isRunning = false;
+            }
+
+            if(this->actor.speedXZ > 0.0f && (this->skelAnime.animation != &gMidoWalkingAnim || isRunning != this->isRunning)) {
+                Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, targetAnim);
+            } else if(this->actor.speedXZ == 0.0f && this->skelAnime.animation != &gMidoHandsOnHipsIdleAnim) {
+                Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
+            }
+
+            this->isRunning = isRunning;
         }
-        if (play->sceneNum == SCENE_SPOT10) {
-            SET_EVENTCHKINF(EVENTCHKINF_0A);
+    } else if(this->actor.params != 1 && this->actor.params != 2){
+        if (this->unk_1E0.unk_00 == 0) {
+            this->actor.world.rot.y = this->actor.yawTowardsPlayer;
+            this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
+
+            yaw = Math_Vec3f_Yaw(&this->actor.home.pos, &actorToBlock->world.pos);
+
+            this->actor.world.pos.x = this->actor.home.pos.x;
+            this->actor.world.pos.x += 60.0f * Math_SinS(yaw);
+
+            this->actor.world.pos.z = this->actor.home.pos.z;
+            this->actor.world.pos.z += 60.0f * Math_CosS(yaw);
+
+            temp = fabsf((f32)this->actor.yawTowardsPlayer - yaw) * 0.001f * 3.0f;
+            this->skelAnime.playSpeed = CLAMP(temp, 1.0f, 3.0f);
         }
 
-        func_80AAA92C(this, 3);
-        func_80AAA93C(this);
-        this->waypoint = 1;
-        this->unk_1E0.unk_00 = 0;
-        this->actionFunc = func_80AABD0C;
-        this->actor.speedXZ = 1.5f;
-        return;
+        if (this->unk_1E0.unk_00 == 2) {
+            if (CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD) && !GET_EVENTCHKINF(EVENTCHKINF_1C) &&
+                (play->sceneNum == SCENE_SPOT04)) {
+                play->msgCtx.msgMode = MSGMODE_PAUSED;
+            }
+
+            if (play->sceneNum == SCENE_SPOT04) {
+                SET_EVENTCHKINF(EVENTCHKINF_04);
+            }
+            if (play->sceneNum == SCENE_SPOT10) {
+                SET_EVENTCHKINF(EVENTCHKINF_0A);
+            }
+
+            func_80AAA92C(this, 3);
+            func_80AAA93C(this);
+            this->waypoint = 1;
+            this->unk_1E0.unk_00 = 0;
+            this->actionFunc = func_80AABD0C;
+            this->actor.speedXZ = 1.5f;
+            return;
+        }
     }
 
     if (this->skelAnime.animation == &gMidoHandsOnHipsIdleAnim) {
@@ -827,7 +927,9 @@ void EnMd_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     EnMd_UpdateEyes(this);
     func_80AAB5A4(this, play);
-    Actor_MoveForward(&this->actor);
+    if(thisx->params != 1 || this->skelAnime.animation == &gMidoWalkingAnim) {
+        Actor_MoveForward(&this->actor);
+    }
     func_80AAB158(this, play);
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_2);
     this->actionFunc(this, play);

@@ -194,8 +194,8 @@ static ShopItemEntry shopItemEntries[] = {
     { OBJECT_GI_SHIELD_2, GID_SHIELD_HYLIAN, func_8002EBCC, 80, 1, 0x00A9, 0x0092, GI_SHIELD_HYLIAN,
       EnGirlA_CanBuy_HylianShield, EnGirlA_ItemGive_HylianShield, EnGirlA_BuyEvent_ShieldDiscount },
     /* SI_DEKU_SHIELD */
-    { OBJECT_GI_SHIELD_1, GID_SHIELD_DEKU, func_8002EBCC, 40, 1, 0x009F, 0x0089, GI_SHIELD_DEKU,
-      EnGirlA_CanBuy_DekuShield, EnGirlA_ItemGive_DekuShield, EnGirlA_BuyEvent_ShieldDiscount },
+    { OBJECT_GI_SEED, GID_SEEDS, func_8002EBCC, 30, 30, 0x00DF, 0x00DE, GI_SEEDS_30, EnGirlA_CanBuy_DekuSeeds,
+      EnGirlA_ItemGive_DekuSeeds, EnGirlA_BuyEvent_ShieldDiscount },
     /* SI_GORON_TUNIC */
     { OBJECT_GI_CLOTHES, GID_TUNIC_GORON, NULL, 200, 1, 0x00AA, 0x0093, GI_TUNIC_GORON, EnGirlA_CanBuy_GoronTunic,
       EnGirlA_ItemGive_GoronTunic, EnGirlA_BuyEvent_GoronTunic },
@@ -321,6 +321,7 @@ s32 EnGirlA_TryChangeShopItem(EnGirlA* this) {
                 return true;
             }
             break;
+        /*
         case SI_BOMBCHU_10_2:
             if (GET_ITEMGETINF(ITEMGETINF_06)) {
                 this->actor.params = SI_SOLD_OUT;
@@ -369,6 +370,7 @@ s32 EnGirlA_TryChangeShopItem(EnGirlA* this) {
                 return true;
             }
             break;
+        */
     }
     return false;
 }

@@ -26,6 +26,9 @@ typedef struct EnMd {
     /* 0x0236 */ s16 unk_236[17];
     /* 0x0258 */ Vec3s jointTable[17];
     /* 0x02BE */ Vec3s morphTable[17];
+    bool isRunning;
+    bool isFollowing;
+    s32 teleportTimer;
 } EnMd; // size = 0x0324
 
 #endif
