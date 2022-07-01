@@ -93,6 +93,10 @@ static AnimationInfo sAnimationInfo[] = {
     { &gMidoWalkingAnim, 3.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -1.0f },
 };
 
+bool EnMd_IsFollower(EnMd* this) {
+    return this->actor.params & IS_FOLLOWER_MASK;
+}
+
 void func_80AAA250(EnMd* this) {
     f32 startFrame;
 
@@ -370,7 +374,7 @@ void func_80AAAA24(EnMd* this) {
                 }
                 break;
         }
-    } else if (this->skelAnime.animation != &gMidoHandsOnHipsIdleAnim && this->actor.params != 1 && this->actor.params != 2) {
+    } else if (this->skelAnime.animation != &gMidoHandsOnHipsIdleAnim && !EnMd_IsFollower(this)) {
         Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
         func_80AAA92C(this, 0);
     }
@@ -458,7 +462,7 @@ u16 EnMd_GetTextLostWoods(PlayState* play, EnMd* this) {
 u16 EnMd_GetText(PlayState* play, Actor* thisx) {
     EnMd* this = (EnMd*)thisx;
 
-    if(thisx->params == 1) {
+    if(EnMd_IsFollower(this)) {
         return 0x71B5;
     }
 
@@ -589,24 +593,21 @@ void func_80AAB158(EnMd* this, PlayState* play) {
     }
 
     func_80034A14(&this->actor, &this->unk_1E0, 2, temp);
-    if (this->actionFunc != func_80AABC10) {
-        if (temp2) {
-            if(this->actor.params == 1 || this->actor.params == 2) {
-                if (Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE && Message_ShouldAdvance(play)) {
-                    switch (play->msgCtx.choiceIndex) {
-                        case 0: // Yes
-                            this->isFollowing = true;
-                            break;
-                        case 1: // No
-                            this->isFollowing = false;
-                            break;
-                        Message_CloseTextbox(play);
-                    }
-                } else {
-                    func_800343CC(play, &this->actor, &this->unk_1E0.unk_00, this->collider.dim.radius + 30.0f, EnMd_GetText,
-                                  func_80AAAF04);
-                }
+    if (this->actionFunc != func_80AABC10 && temp2) {
+        if(EnMd_IsFollower(this) &&
+           Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE && Message_ShouldAdvance(play)) {
+            switch (play->msgCtx.choiceIndex) {
+                case 0: // Yes
+                    this->isFollowing = true;
+                    break;
+                case 1: // No
+                    this->isFollowing = false;
+                    break;
+                Message_CloseTextbox(play);
             }
+        } else {
+            func_800343CC(play, &this->actor, &this->unk_1E0.unk_00, this->collider.dim.radius + 30.0f, EnMd_GetText,
+                          func_80AAAF04);
         }
     }
 }
@@ -617,7 +618,7 @@ u8 EnMd_FollowPath(EnMd* this, PlayState* play) {
     f32 pathDiffX;
     f32 pathDiffZ;
 
-    if ((this->actor.params & 0xFF00) == 0xFF00 || this->actor.params == 1 || this->actor.params == 2) {
+    if ((this->actor.params & 0xFF00) == 0xFF00 || EnMd_IsFollower(this)) {
         return 0;
     }
 
@@ -644,7 +645,7 @@ u8 EnMd_SetMovedPos(EnMd* this, PlayState* play) {
     Path* path;
     Vec3s* lastPointPos;
 
-    if ((this->actor.params & 0xFF00) == 0xFF00 || this->actor.params == 1 || this->actor.params == 2) {
+    if ((this->actor.params & 0xFF00) == 0xFF00 || EnMd_IsFollower(this)) {
         return 0;
     }
 
@@ -684,7 +685,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, this->actor.params == 1 || this->actor.params == 2 ?
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, EnMd_IsFollower(this) ?
         &sColChkInfoInit_Follower : &sColChkInfoInit);
     if (!EnMd_ShouldSpawn(this, play)) {
         Actor_Kill(&this->actor);
@@ -705,7 +706,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
         ((play->sceneNum == SCENE_SPOT04) && GET_EVENTCHKINF(EVENTCHKINF_04) &&
          CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD)) ||
         ((play->sceneNum == SCENE_SPOT10) && !GET_EVENTCHKINF(EVENTCHKINF_0A)) ||
-        this->actor.params == 1 || this->actor.params == 2) {
+        EnMd_IsFollower(this)) {
         this->actor.home.pos = this->actor.world.pos;
         this->actionFunc = func_80AAB948;
         return;
@@ -754,7 +755,7 @@ void func_80AAB948(EnMd* this, PlayState* play) {
     func_80AAAA24(this);
 
     // Follow Link
-    if (this->isFollowing) {
+    if (EnMd_IsFollower(this) && this->isFollowing) {
         this->actor.gravity = -2.0f;
 
         this->actor.world.rot.y = this->actor.yawTowardsPlayer;
@@ -815,7 +816,7 @@ void func_80AAB948(EnMd* this, PlayState* play) {
 
             this->isRunning = isRunning;
         }
-    } else if(this->actor.params != 1 && this->actor.params != 2){
+    } else if(!EnMd_IsFollower(this)){
         if (this->unk_1E0.unk_00 == 0) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -927,7 +928,7 @@ void EnMd_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     EnMd_UpdateEyes(this);
     func_80AAB5A4(this, play);
-    if(thisx->params != 1 || this->skelAnime.animation == &gMidoWalkingAnim) {
+    if(!EnMd_IsFollower(this) || this->skelAnime.animation == &gMidoWalkingAnim) {
         Actor_MoveForward(&this->actor);
     }
     func_80AAB158(this, play);

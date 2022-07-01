@@ -68,6 +68,8 @@
 #define CTRL_PURPLE     5
 #define CTRL_YELLOW     6
 #define CTRL_BLACK      7
+#define CTRL_GREEN      8
+#define CTRL_ORANGE     9
 
 #ifdef MESSAGE_DATA_STATIC
 // For use in message_data_static files
@@ -131,11 +133,15 @@
 #define PURPLE      COLOR_STR(CTRL_PURPLE)
 #define YELLOW      COLOR_STR(CTRL_YELLOW)
 #define BLACK       COLOR_STR(CTRL_BLACK)
+#define GREEN       COLOR_STR(CTRL_GREEN)
+#define ORANGE      COLOR_STR(CTRL_ORANGE)
 
 #else
 // For use in code files
 #define MSGCOL_DEFAULT      HEX(CTRL_DEFAULT)
 #define MSGCOL_RED          HEX(CTRL_RED)
+#define MSGCOL_ORANGE       HEX(CTRL_ORANGE)
+#define MSGCOL_GREEN        HEX(CTRL_GREEN)
 #define MSGCOL_ADJUSTABLE   HEX(CTRL_ADJUSTABLE)
 #define MSGCOL_BLUE         HEX(CTRL_BLUE)
 #define MSGCOL_LIGHTBLUE    HEX(CTRL_LIGHTBLUE)

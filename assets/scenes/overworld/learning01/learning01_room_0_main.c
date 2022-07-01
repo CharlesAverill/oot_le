@@ -23,13 +23,13 @@ s16 learning01_room_0_header00_objectList[4] = {
 	OBJECT_HORSE_GANON,
 	OBJECT_ZO,
 	OBJECT_MD,
-	OBJECT_WOOD02,
+	OBJECT_TIDO,
 };
 
 ActorEntry learning01_room_0_header00_actorList[4] = {
-	{ ACTOR_EN_MD, -105, -190, -345, 0, 0, 0, 0x0001 },
-	{ ACTOR_EN_HORSE_GANON, 324, 56, -777, 0, 0, 0, 0x0000 },
-	{ ACTOR_EN_ZO, 61, -190, -345, 0, 0, 0, 0x0009 },
 	{ ACTOR_EN_WOOD02, -232, -190, 250, 0, 0, 0, 0x0001 },
+	{ ACTOR_EN_HORSE_GANON, 324, 56, -777, 0, 0, 0, 0x0000 },
+	{ ACTOR_EN_TIDO, -105, -180, -345, 0, 0, 0, 0x0000 },
+	{ ACTOR_EN_ZO, 61, -190, -345, 0, 0, 0, 0x0009 },
 };
 

@@ -3101,9 +3101,14 @@ beginseg
 endseg
 
 beginseg
+    name "ovl_En_Tido"
+    include "build/src/overlays/actors/ovl_En_Tido/z_en_tido.o"
+    include "build/src/overlays/actors/ovl_En_Tido/ovl_En_Tido_reloc.o"
+endseg
+
+beginseg
     name "ovl_End_Title"
     include "build/src/overlays/actors/ovl_End_Title/z_end_title.o"
-    include "build/src/overlays/actors/ovl_End_Title/ovl_End_Title_reloc.o"
 endseg
 
 beginseg
@@ -6040,6 +6045,13 @@ beginseg
     name "object_zl4"
     romalign 0x1000
     include "build/assets/objects/object_zl4/object_zl4.o"
+    number 6
+endseg
+
+beginseg
+    name "object_tido"
+    romalign 0x1000
+    include "build/assets/objects/object_tido/object_tido.o"
     number 6
 endseg
 

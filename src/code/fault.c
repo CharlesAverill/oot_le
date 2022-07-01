@@ -1211,7 +1211,7 @@ void Fault_ThreadEntry(void* arg) {
         }
 
         // Set auto-scrolling and default colors
-        sFaultInstance->autoScroll = true;
+        sFaultInstance->autoScroll = false;
         FaultDrawer_SetForeColor(GPACK_RGBA5551(255, 255, 255, 1));
         FaultDrawer_SetBackColor(GPACK_RGBA5551(0, 0, 0, 0));
 

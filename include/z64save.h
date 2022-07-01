@@ -12,7 +12,7 @@ typedef enum {
     /* 0x4 */ MAGIC_STATE_METER_FLASH_2, // Flashes border and draws yellow magic to preview target consumption
     /* 0x5 */ MAGIC_STATE_RESET, // Reset colors and return to idle
     /* 0x6 */ MAGIC_STATE_METER_FLASH_3, // Flashes border with no additional behaviour
-    /* 0x7 */ MAGIC_STATE_CONSUME_LENS, // Magic slowly consumed by lens. 
+    /* 0x7 */ MAGIC_STATE_CONSUME_LENS, // Magic slowly consumed by lens.
     /* 0x8 */ MAGIC_STATE_STEP_CAPACITY, // Step `magicCapacity` to full capacity
     /* 0x9 */ MAGIC_STATE_FILL, // Add magic until magicFillTarget is reached.
     /* 0xA */ MAGIC_STATE_ADD // Add requested magic
@@ -641,6 +641,20 @@ typedef enum {
 #define INFTABLE_196 0x196
 #define INFTABLE_197 0x197
 #define INFTABLE_198 0x198
+#define INFTABLE_TIDO_GIVE_SLINGSHOT 0x1A1
+#define INFTABLE_TIDO_ASK_FOR_STICKS 0x1A3
+#define INFTABLE_EMPTY_1 0x1A4
+#define INFTABLE_EMPTY_2 0x1A5
+#define INFTABLE_EMPTY_3 0x1A6
+#define INFTABLE_EMPTY_4 0x1A7
+#define INFTABLE_EMPTY_5 0x1A8
+#define INFTABLE_EMPTY_6 0x1A9
+#define INFTABLE_EMPTY_7 0x1AA
+#define INFTABLE_EMPTY_8 0x1AB
+#define INFTABLE_EMPTY_9 0x1AC
+#define INFTABLE_EMPTY_10 0x1AD
+#define INFTABLE_EMPTY_11 0x1AE
+#define INFTABLE_EMPTY_12 0x1AF
 
 // 0x199-0x19F
 #define INFTABLE_199_19A_19B_19C_19D_19E_19F_INDEX 25

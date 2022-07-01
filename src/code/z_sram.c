@@ -160,6 +160,7 @@ static u16 sNewSaveChecksum = 0;
  *  This save has an empty inventory with 3 hearts and single magic.
  */
 void Sram_InitNewSave(void) {
+    int i;
     SaveContext* temp = &gSaveContext;
 
     bzero(&SAVE_INFO, sizeof(SaveInfo));

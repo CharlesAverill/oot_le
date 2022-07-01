@@ -1,6 +1,6 @@
 /**
  * Matching dmadata layout for PAL MQ Debug
- * 
+ *
  * DEFINE_DMA_ENTRY should be used for all dmadata entries
  *    - Argument 1: Name of the spec segment
  *    - Argument 2: String matching the original name of the segment
@@ -1537,3 +1537,4 @@ DEFINE_DMA_ENTRY(anime_texture_4_static, "anime_texture_4_static")
 DEFINE_DMA_ENTRY(anime_texture_5_static, "anime_texture_5_static")
 DEFINE_DMA_ENTRY(anime_texture_6_static, "anime_texture_6_static")
 DEFINE_DMA_ENTRY(softsprite_matrix_static, "softsprite_matrix_static")
+DEFINE_DMA_ENTRY(ovl_En_Tido, "ovl_En_Tido")

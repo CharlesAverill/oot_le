@@ -404,6 +404,16 @@ void Message_SetTextColor(MessageContext* msgCtx, u16 colorParameter) {
                 msgCtx->textColorB = 60;
             }
             break;
+        case MSGCOL_GREEN:
+            msgCtx->textColorR = 70;
+            msgCtx->textColorG = 255;
+            msgCtx->textColorB = 80;
+            break;
+        case MSGCOL_ORANGE:
+            msgCtx->textColorR = 247;
+            msgCtx->textColorG = 104;
+            msgCtx->textColorB = 6;
+            break;
         case MSGCOL_ADJUSTABLE:
             if (msgCtx->textBoxType == TEXTBOX_TYPE_WOODEN) {
                 msgCtx->textColorR = R_TEXT_ADJUST_COLOR_1_R;

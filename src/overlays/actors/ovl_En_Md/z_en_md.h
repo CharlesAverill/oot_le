@@ -4,6 +4,8 @@
 #include "ultra64.h"
 #include "global.h"
 
+#define IS_FOLLOWER_MASK 3
+
 struct EnMd;
 
 typedef void (*EnMdActionFunc)(struct EnMd*, PlayState*);
