@@ -527,7 +527,7 @@ typedef struct Player {
     /* 0x0498 */ ColliderCylinder cylinder;
     /* 0x04E4 */ ColliderQuad meleeWeaponQuads[2];
     /* 0x05E4 */ ColliderQuad shieldQuad;
-    /* 0x0664 */ Actor*     unk_664;
+    /* 0x0664 */ Actor*     targetActor;
     /* 0x0668 */ char       unk_668[0x004];
     /* 0x066C */ s32        unk_66C;
     /* 0x0670 */ s32        meleeWeaponEffectIndex;
@@ -541,8 +541,8 @@ typedef struct Player {
     /* 0x0690 */ s16        naviTextId;
     /* 0x0692 */ u8         stateFlags3;
     /* 0x0693 */ s8         exchangeItemId;
-    /* 0x0694 */ Actor*     targetActor;
-    /* 0x0698 */ f32        targetActorDistance;
+    /* 0x0694 */ Actor*     talkActor;
+    /* 0x0698 */ f32        talkActorDistance;
     /* 0x069C */ char       unk_69C[0x004];
     /* 0x06A0 */ f32        unk_6A0;
     /* 0x06A4 */ f32        unk_6A4;

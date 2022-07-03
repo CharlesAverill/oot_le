@@ -85,7 +85,8 @@ void EnTido_Init(Actor* thisx, PlayState* play) {
     EnTido* this = (EnTido*)thisx;
     s32 pad;
 
-    SkelAnime_InitFlex(play, &this->skelAnime, &gTidoSkel, NULL, this->jointTable, this->morphTable, GTIDOSKEL_NUM_LIMBS);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gTidoSkel, NULL, this->jointTable, this->morphTable,
+                       GTIDOSKEL_NUM_LIMBS);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
 
     this->alpha = 255;
@@ -120,15 +121,17 @@ void EnTido_Destroy(Actor* thisx, PlayState* play) {
 }
 
 u16 EnTido_GetText(PlayState* play, Actor* thisx) {
-    if(!GET_INFTABLE(INFTABLE_TIDO_GIVE_SLINGSHOT)) {
-        if(AMMO(ITEM_STICK) >= 2) {
-            if(GET_INFTABLE(INFTABLE_TIDO_ASK_FOR_STICKS)) {
+    if (INV_CONTENT(SLOT_SLINGSHOT) != ITEM_SLINGSHOT) {
+        if (!GET_INFTABLE(INFTABLE_0C)) {
+            return 0x71BD;
+        } else if (AMMO(ITEM_STICK) >= 2) {
+            if (GET_INFTABLE(INFTABLE_TIDO_ASK_FOR_STICKS)) {
                 return 0x71BC;
             } else {
                 return 0x71B7;
             }
         } else {
-            if(GET_INFTABLE(INFTABLE_TIDO_ASK_FOR_STICKS)) {
+            if (GET_INFTABLE(INFTABLE_TIDO_ASK_FOR_STICKS)) {
                 return 0x71BB;
             } else {
                 return 0x71B8;
@@ -136,7 +139,11 @@ u16 EnTido_GetText(PlayState* play, Actor* thisx) {
         }
     }
 
-    return 0x71B6;
+    if (CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD)) {
+        return 0x71B6;
+    } else {
+        return 0x71BD;
+    }
 }
 
 s16 EnTido_UpdateFlags(PlayState* play, Actor* thisx) {
@@ -151,7 +158,7 @@ s16 EnTido_UpdateFlags(PlayState* play, Actor* thisx) {
             return 1;
 
         case TEXT_STATE_DONE:
-            switch(this->actor.textId) {
+            switch (this->actor.textId) {
                 case 0x71B7:
                 case 0x71BC:
                     this->actionFunc = EnTido_SetupGetItem;
@@ -191,18 +198,17 @@ void EnTido_Dialog(EnTido* this, PlayState* play) {
     temp = 1;
 
     func_80034A14(&this->actor, &this->unk_1E0, 2, temp);
-    func_800343CC(play, &this->actor, &this->unk_1E0.unk_00, this->collider.dim.radius + 30.0f, EnTido_GetText, EnTido_UpdateFlags);
+    func_800343CC(play, &this->actor, &this->unk_1E0.unk_00, this->collider.dim.radius + 30.0f, EnTido_GetText,
+                  EnTido_UpdateFlags);
 }
 
 void EnTido_SetupGetItem(EnTido* this, PlayState* play) {
     f32 xzRange;
     f32 yRange;
 
-    if(!GET_INFTABLE(INFTABLE_TIDO_GIVE_SLINGSHOT)) {
+    if (INV_CONTENT(SLOT_SLINGSHOT) != ITEM_SLINGSHOT) {
         Inventory_ChangeAmmo(ITEM_STICK, -2);
     }
-
-    SET_INFTABLE(INFTABLE_TIDO_GIVE_SLINGSHOT);
 
     yRange = fabsf(this->actor.yDistToPlayer) * 2.0f;
     xzRange = this->actor.xzDistToPlayer * 2.0f;
@@ -238,7 +244,7 @@ void EnTido_Update(Actor* thisx, PlayState* play) {
     EnTido_UpdateAlpha(this, play);
     this->actor.shape.shadowAlpha = this->alpha;
 
-    if(this->actionFunc != NULL) {
+    if (this->actionFunc != NULL) {
         this->actionFunc(this, play);
     }
 
@@ -249,7 +255,8 @@ void EnTido_Update(Actor* thisx, PlayState* play) {
     CollisionCheck_SetOC(play, &play->colChkCtx, &collider->base);
 }
 
-s32 EnTido_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx, Gfx** gfx) {
+s32 EnTido_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx,
+                            Gfx** gfx) {
     return false;
 }
 
@@ -267,8 +274,8 @@ Gfx* EnTido_SetEnvColor(GraphicsContext* gfxCtx, u8 r, u8 g, u8 b, u8 a) {
 
 void EnTido_Draw(Actor* thisx, PlayState* play) {
     EnTido* this = (EnTido*)thisx;
-    Color_RGBA8 tunicColor = {247, 104, 6, 255};
-    Color_RGBA8 bootsColor = {98, 74, 46, 255};
+    Color_RGBA8 tunicColor = { 247, 104, 6, 255 };
+    Color_RGBA8 bootsColor = { 98, 74, 46, 255 };
 
     this->actor.shape.shadowAlpha = this->alpha;
 

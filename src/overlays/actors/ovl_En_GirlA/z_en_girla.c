@@ -321,56 +321,56 @@ s32 EnGirlA_TryChangeShopItem(EnGirlA* this) {
                 return true;
             }
             break;
-        /*
-        case SI_BOMBCHU_10_2:
-            if (GET_ITEMGETINF(ITEMGETINF_06)) {
-                this->actor.params = SI_SOLD_OUT;
-                return true;
-            }
-            break;
-        case SI_BOMBCHU_10_3:
-            if (GET_ITEMGETINF(ITEMGETINF_07)) {
-                this->actor.params = SI_SOLD_OUT;
-                return true;
-            }
-            break;
-        case SI_BOMBCHU_20_3:
-            if (GET_ITEMGETINF(ITEMGETINF_08)) {
-                this->actor.params = SI_SOLD_OUT;
-                return true;
-            }
-            break;
-        case SI_BOMBCHU_20_4:
-            if (GET_ITEMGETINF(ITEMGETINF_09)) {
-                this->actor.params = SI_SOLD_OUT;
-                return true;
-            }
-            break;
-        case SI_BOMBCHU_10_4:
-            if (GET_ITEMGETINF(ITEMGETINF_0A)) {
-                this->actor.params = SI_SOLD_OUT;
-                return true;
-            }
-            break;
-        case SI_BOMBCHU_10_1:
-            if (GET_ITEMGETINF(ITEMGETINF_03)) {
-                this->actor.params = SI_SOLD_OUT;
-                return true;
-            }
-            break;
-        case SI_BOMBCHU_20_1:
-            if (GET_ITEMGETINF(ITEMGETINF_04)) {
-                this->actor.params = SI_SOLD_OUT;
-                return true;
-            }
-            break;
-        case SI_BOMBCHU_20_2:
-            if (GET_ITEMGETINF(ITEMGETINF_05)) {
-                this->actor.params = SI_SOLD_OUT;
-                return true;
-            }
-            break;
-        */
+            /*
+            case SI_BOMBCHU_10_2:
+                if (GET_ITEMGETINF(ITEMGETINF_06)) {
+                    this->actor.params = SI_SOLD_OUT;
+                    return true;
+                }
+                break;
+            case SI_BOMBCHU_10_3:
+                if (GET_ITEMGETINF(ITEMGETINF_07)) {
+                    this->actor.params = SI_SOLD_OUT;
+                    return true;
+                }
+                break;
+            case SI_BOMBCHU_20_3:
+                if (GET_ITEMGETINF(ITEMGETINF_08)) {
+                    this->actor.params = SI_SOLD_OUT;
+                    return true;
+                }
+                break;
+            case SI_BOMBCHU_20_4:
+                if (GET_ITEMGETINF(ITEMGETINF_09)) {
+                    this->actor.params = SI_SOLD_OUT;
+                    return true;
+                }
+                break;
+            case SI_BOMBCHU_10_4:
+                if (GET_ITEMGETINF(ITEMGETINF_0A)) {
+                    this->actor.params = SI_SOLD_OUT;
+                    return true;
+                }
+                break;
+            case SI_BOMBCHU_10_1:
+                if (GET_ITEMGETINF(ITEMGETINF_03)) {
+                    this->actor.params = SI_SOLD_OUT;
+                    return true;
+                }
+                break;
+            case SI_BOMBCHU_20_1:
+                if (GET_ITEMGETINF(ITEMGETINF_04)) {
+                    this->actor.params = SI_SOLD_OUT;
+                    return true;
+                }
+                break;
+            case SI_BOMBCHU_20_2:
+                if (GET_ITEMGETINF(ITEMGETINF_05)) {
+                    this->actor.params = SI_SOLD_OUT;
+                    return true;
+                }
+                break;
+            */
     }
     return false;
 }

@@ -546,7 +546,7 @@ s32 EnZf_CanAttack(PlayState* play, EnZf* this) {
             return true;
         }
         if (this->actor.params == ENZF_TYPE_DINOLFOS) {
-            targetedActor = player->unk_664;
+            targetedActor = player->targetActor;
             if (targetedActor == NULL) {
                 return false;
             } else {

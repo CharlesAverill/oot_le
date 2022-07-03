@@ -1087,7 +1087,7 @@ void CollisionCheck_DisableSAC(PlayState* play, CollisionCheckContext* colChkCtx
  * Draws a collider of any shape.
  * Math3D_DrawSphere and Math3D_DrawCylinder are noops, so JntSph and Cylinder are not drawn.
  */
-void Collider_Draw(PlayState* play, Collider* collider) {
+void Collider_Draw(PlayState* play, Collider* collider, u8 r, u8 g, u8 b, u8 a) {
     ColliderJntSph* jntSph;
     ColliderCylinder* cylinder;
     ColliderTris* tris;
@@ -1101,12 +1101,12 @@ void Collider_Draw(PlayState* play, Collider* collider) {
         case COLSHAPE_JNTSPH:
             jntSph = (ColliderJntSph*)collider;
             for (i = 0; i < jntSph->count; i++) {
-                Math3D_DrawSphere(play, &jntSph->elements[i].dim.worldSphere);
+                Math3D_DrawSphere(play, &jntSph->elements[i].dim.worldSphere, r, g, b, a);
             }
             break;
         case COLSHAPE_CYLINDER:
             cylinder = (ColliderCylinder*)collider;
-            Math3D_DrawCylinder(play, &cylinder->dim);
+            Math3D_DrawCylinder(play, &cylinder->dim, r, g, b, a);
             break;
         case COLSHAPE_TRIS:
             tris = (ColliderTris*)collider;
@@ -1131,32 +1131,24 @@ void CollisionCheck_DrawCollision(PlayState* play, CollisionCheckContext* colChk
     Collider* collider;
     s32 i;
 
-    if (AREG(15)) {
-        if (AREG(21)) {
-            for (i = 0; i < colChkCtx->colATCount; i++) {
-                Collider_Draw(play, colChkCtx->colAT[i]);
-            }
-        }
-        if (AREG(22)) {
-            for (i = 0; i < colChkCtx->colACCount; i++) {
-                Collider_Draw(play, colChkCtx->colAC[i]);
-            }
-        }
-        if (AREG(23)) {
-            for (i = 0; i < colChkCtx->colOCCount; i++) {
-                collider = colChkCtx->colOC[i];
-                if (collider->ocFlags1 & OC1_ON) {
-                    Collider_Draw(play, collider);
-                }
-            }
-        }
-        if (AREG(24)) {
-            BgCheck_DrawDynaCollision(play, &play->colCtx);
-        }
-        if (AREG(25)) {
-            BgCheck_DrawStaticCollision(play, &play->colCtx);
+    if(!HREG(76)) {
+        return;
+    }
+
+    for (i = 0; i < colChkCtx->colOCCount; i++) {
+        collider = colChkCtx->colOC[i];
+        if (collider->ocFlags1 & OC1_ON) {
+            Collider_Draw(play, collider, 0, 0, 255, 255);
         }
     }
+    for (i = 0; i < colChkCtx->colACCount; i++) {
+        Collider_Draw(play, colChkCtx->colAC[i], 255, 255, 255, 255);
+    }
+    for (i = 0; i < colChkCtx->colATCount; i++) {
+        Collider_Draw(play, colChkCtx->colAT[i], 255, 0, 0, 255);
+    }
+    BgCheck_DrawDynaCollision(play, &play->colCtx);
+    BgCheck_DrawStaticCollision(play, &play->colCtx);
 }
 
 static ColChkResetFunc sATResetFuncs[] = {

@@ -28,8 +28,8 @@ ActorEntry learning01_scene_header00_startPositionList[] = {
 };
 
 TransitionActorEntry learning01_scene_header00_transitionActors[2] = {
-	{ 0, 0x00, 1, 0x00, ACTOR_DOOR_SHUTTER, -501, -242, 810, 0, 0x0000 },
 	{ 1, 0x00, 0, 0x00, ACTOR_DOOR_SHUTTER, -501, -243, 830, 0, 0x0000 },
+	{ 0, 0x00, 1, 0x00, ACTOR_DOOR_SHUTTER, -501, -242, 810, 0, 0x0000 },
 };
 
 extern u8 _learning01_room_0SegmentRomStart[];

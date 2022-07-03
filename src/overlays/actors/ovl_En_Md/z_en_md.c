@@ -72,7 +72,8 @@ typedef enum {
     /* 11 */ ENMD_ANIM_11,
     /* 12 */ ENMD_ANIM_12,
     /* 13 */ ENMD_ANIM_13,
-    /* 14 */ ENMD_ANIM_WALKFAST
+    /* 14 */ ENMD_ANIM_WALKFAST,
+    /* 15 */ ENMD_ANIM_STAB
 } EnMdAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
@@ -91,6 +92,7 @@ static AnimationInfo sAnimationInfo[] = {
     { &gMidoRaiseHand2Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -1.0f },
     { &gMidoAngryHeadTurnAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -1.0f },
     { &gMidoWalkingAnim, 3.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -1.0f },
+    { &gMidoSkelStabAnim, 0.7f, 0.0f, -1.0f, ANIMMODE_LOOP, -1.0f }
 };
 
 bool EnMd_IsFollower(EnMd* this) {
@@ -290,7 +292,7 @@ void func_80AAA92C(EnMd* this, u8 arg1) {
 }
 
 void func_80AAA93C(EnMd* this) {
-    if(this->isFollowing && this->actor.speedXZ != 0.0f) {
+    if (this->isFollowing && this->actor.speedXZ != 0.0f) {
         return;
     }
 
@@ -414,8 +416,7 @@ u16 EnMd_GetTextKokiriForest(PlayState* play, EnMd* this) {
         return 0x1034;
     }
 
-    if ((CUR_EQUIP_VALUE(EQUIP_TYPE_SHIELD) == EQUIP_VALUE_SHIELD_DEKU) &&
-        (CUR_EQUIP_VALUE(EQUIP_TYPE_SWORD) == EQUIP_VALUE_SWORD_KOKIRI)) {
+    if (INV_CONTENT(SLOT_SLINGSHOT) == ITEM_SLINGSHOT) {
         return 0x1033;
     }
 
@@ -462,7 +463,7 @@ u16 EnMd_GetTextLostWoods(PlayState* play, EnMd* this) {
 u16 EnMd_GetText(PlayState* play, Actor* thisx) {
     EnMd* this = (EnMd*)thisx;
 
-    if(EnMd_IsFollower(this)) {
+    if (EnMd_IsFollower(this)) {
         return 0x71B5;
     }
 
@@ -535,7 +536,7 @@ u8 EnMd_ShouldSpawn(EnMd* this, PlayState* play) {
         }
     }
 
-    if (play->sceneNum == SCENE_SPOT10 || play->sceneNum == SCENE_LEARNING01) {
+    if (play->sceneNum == SCENE_SPOT10 || EnMd_IsFollower(this)) {
         return 1;
     }
 
@@ -594,8 +595,8 @@ void func_80AAB158(EnMd* this, PlayState* play) {
 
     func_80034A14(&this->actor, &this->unk_1E0, 2, temp);
     if (this->actionFunc != func_80AABC10 && temp2) {
-        if(EnMd_IsFollower(this) &&
-           Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE && Message_ShouldAdvance(play)) {
+        if (EnMd_IsFollower(this) && Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE &&
+            Message_ShouldAdvance(play)) {
             switch (play->msgCtx.choiceIndex) {
                 case 0: // Yes
                     this->isFollowing = true;
@@ -603,7 +604,7 @@ void func_80AAB158(EnMd* this, PlayState* play) {
                 case 1: // No
                     this->isFollowing = false;
                     break;
-                Message_CloseTextbox(play);
+                    Message_CloseTextbox(play);
             }
         } else {
             func_800343CC(play, &this->actor, &this->unk_1E0.unk_00, this->collider.dim.radius + 30.0f, EnMd_GetText,
@@ -685,8 +686,8 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
 
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
-    CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, EnMd_IsFollower(this) ?
-        &sColChkInfoInit_Follower : &sColChkInfoInit);
+    CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL,
+                            EnMd_IsFollower(this) ? &sColChkInfoInit_Follower : &sColChkInfoInit);
     if (!EnMd_ShouldSpawn(this, play)) {
         Actor_Kill(&this->actor);
         return;
@@ -705,8 +706,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
     if (((play->sceneNum == SCENE_SPOT04) && !GET_EVENTCHKINF(EVENTCHKINF_04)) ||
         ((play->sceneNum == SCENE_SPOT04) && GET_EVENTCHKINF(EVENTCHKINF_04) &&
          CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD)) ||
-        ((play->sceneNum == SCENE_SPOT10) && !GET_EVENTCHKINF(EVENTCHKINF_0A)) ||
-        EnMd_IsFollower(this)) {
+        ((play->sceneNum == SCENE_SPOT10) && !GET_EVENTCHKINF(EVENTCHKINF_0A)) || EnMd_IsFollower(this)) {
         this->actor.home.pos = this->actor.world.pos;
         this->actionFunc = func_80AAB948;
         return;
@@ -745,27 +745,33 @@ void func_80AAB948(EnMd* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 temp;
     Actor* actorToBlock = &GET_PLAYER(play)->actor;
+    Actor* targetActor = NULL;
     s16 yaw;
 
     EnMdAnimation targetAnim;
     bool isRunning;
 
-    float xt, zt;
-
     func_80AAAA24(this);
 
     // Follow Link
     if (EnMd_IsFollower(this) && this->isFollowing) {
+
+        if (player->targetActor != NULL && player->targetActor->id != this->actor.id) {
+            targetActor = player->targetActor;
+        } else {
+            targetActor = &(player->actor);
+        }
+
         this->actor.gravity = -2.0f;
 
-        this->actor.world.rot.y = this->actor.yawTowardsPlayer;
-        this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
+        this->actor.world.rot.y = Actor_WorldYawTowardActor(&(this->actor), targetActor);
+        this->actor.shape.rot.y = this->actor.world.rot.y;
 
         // If y dist is big and player isn't climbing
-        if(this->actor.yDistToPlayer > 100 && !(player->stateFlags1 & PLAYER_STATE1_21)) {
-            if(this->teleportTimer == -1) {
+        if (this->actor.yDistToPlayer > 100 && !(player->stateFlags1 & PLAYER_STATE1_21)) {
+            if (this->teleportTimer == -1) {
                 this->teleportTimer = 30;
-            } else if(this->teleportTimer == 1) {
+            } else if (this->teleportTimer == 1) {
                 this->actor.world.pos = player->actor.world.pos;
                 this->teleportTimer = -1;
             } else {
@@ -773,50 +779,41 @@ void func_80AAB948(EnMd* this, PlayState* play) {
             }
         }
 
-        if(this->actor.xzDistToPlayer > 200) {
+        if (Actor_WorldDistXZToActor(&(this->actor), targetActor) > 200) {
             Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
-            //this->actor.world.pos = player->actor.world.pos;
-            // Travel along path to player until within stopping distance
-            xt = this->actor.world.pos.x;
-            zt = this->actor.world.pos.z;
 
-            /*
-            do {
-                xt = (player->actor.world.pos.x + xt) / 2;
-                zt = (player->actor.world.pos.z + zt) / 2;
-
-                tdist = (player->actor.world.pos.x - xt) * (player->actor.world.pos.x - xt) *
-                        (player->actor.world.pos.z - zt) * (player->actor.world.pos.z - zt);
-            } while (tdist > 6400);
-            */
-
-            xt = (player->actor.world.pos.x + xt) / 2;
-            zt = (player->actor.world.pos.z + zt) / 2;
-
-            this->actor.world.pos.x = xt;
-            this->actor.world.pos.z = zt;
+            this->actor.world.pos.x = (player->actor.world.pos.x + this->actor.world.pos.x) / 2;
+            this->actor.world.pos.z = (player->actor.world.pos.z + this->actor.world.pos.z) / 2;
         } else {
             this->actor.speedXZ = 0.0f;
-
-            if(this->actor.xzDistToPlayer > 100) {
+            temp = Actor_WorldDistXZToActor(&(this->actor), targetActor);
+            if (temp > 100) {
                 this->actor.speedXZ = 5.0f;
                 targetAnim = ENMD_ANIM_WALKFAST;
                 isRunning = true;
-            } else if(this->actor.xzDistToPlayer > 80) {
+            } else if (temp > 60) {
                 this->actor.speedXZ = 2.0f;
                 targetAnim = ENMD_ANIM_WALK;
                 isRunning = false;
             }
 
-            if(this->actor.speedXZ > 0.0f && (this->skelAnime.animation != &gMidoWalkingAnim || isRunning != this->isRunning)) {
+            // If moving, play the normal or fast walk animations depending on distance
+            if (this->actor.speedXZ > 0.0f &&
+                (this->skelAnime.animation != &gMidoWalkingAnim || isRunning != this->isRunning)) {
                 Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, targetAnim);
-            } else if(this->actor.speedXZ == 0.0f && this->skelAnime.animation != &gMidoHandsOnHipsIdleAnim) {
-                Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
+            } else if (this->actor.speedXZ == 0.0f) {
+                // If not moving and targeting player, just idle
+                if (targetActor == &(player->actor) && this->skelAnime.animation != &gMidoHandsOnHipsIdleAnim) {
+                    Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
+                    // If not moving and targeting another actor, stab
+                } else if (targetActor != &(player->actor) && this->skelAnime.animation != &gMidoSkelStabAnim) {
+                    Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_STAB);
+                }
             }
 
             this->isRunning = isRunning;
         }
-    } else if(!EnMd_IsFollower(this)){
+    } else if (!EnMd_IsFollower(this)) {
         if (this->unk_1E0.unk_00 == 0) {
             this->actor.world.rot.y = this->actor.yawTowardsPlayer;
             this->actor.shape.rot.y = this->actor.yawTowardsPlayer;
@@ -928,7 +925,7 @@ void EnMd_Update(Actor* thisx, PlayState* play) {
     SkelAnime_Update(&this->skelAnime);
     EnMd_UpdateEyes(this);
     func_80AAB5A4(this, play);
-    if(!EnMd_IsFollower(this) || this->skelAnime.animation == &gMidoWalkingAnim) {
+    if (!EnMd_IsFollower(this) || this->skelAnime.animation == &gMidoWalkingAnim) {
         Actor_MoveForward(&this->actor);
     }
     func_80AAB158(this, play);
@@ -940,7 +937,7 @@ s32 EnMd_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* po
     EnMd* this = (EnMd*)thisx;
     Vec3s vec;
 
-    if (limbIndex == 16) {
+    if (limbIndex == 16 && this->skelAnime.animation != &gMidoSkelStabAnim) {
         Matrix_Translate(1200.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         vec = this->unk_1E0.unk_08;
         Matrix_RotateX(BINANG_TO_RAD_ALT(vec.y), MTXMODE_APPLY);

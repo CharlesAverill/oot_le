@@ -223,8 +223,7 @@ static SceneSelectEntry sScenes[] = {
     // "88: Ganon's Basement Dungeon" (Inside Ganon's Castle)
     { "88: Inside Ganon's Castle", Select_LoadGame, ENTR_GANONTIKA_0 },
     // "89: Final Battle With Ganon - Cutscene & Battle" (Ganondorf's Death Scene & Tower Escape Exterior)
-    { "89: Ganondorf's Death Scene & Tower Escape Exterior", Select_LoadGame,
-      ENTR_GANON_DEMO_0 },
+    { "89: Ganondorf's Death Scene & Tower Escape Exterior", Select_LoadGame, ENTR_GANON_DEMO_0 },
     // "90: Ganon's Tower Aftermath 1" (Escaping Ganon's Tower 1)
     { "90: Escaping Ganon's Tower 1", Select_LoadGame, ENTR_GANON_SONOGO_0 },
     // "91: Ganon's Tower Aftermath 2" (Escaping Ganon's Tower 2)
