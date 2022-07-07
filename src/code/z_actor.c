@@ -797,6 +797,19 @@ void Actor_SetScale(Actor* actor, f32 scale) {
     actor->scale.x = scale;
 }
 
+void Actor_SetPosRot(Actor* actor, f32 x, f32 y, f32 z, s16 ex, s16 ey, s16 ez) {
+    actor->world.pos.x = x;
+    actor->world.pos.y = y;
+    actor->world.pos.z = z;
+    actor->world.rot.x = ex;
+    actor->world.rot.y = ey;
+    actor->world.rot.z = ez;
+}
+
+void Actor_SetPosRotY(Actor* actor, f32 x, f32 y, f32 z, s16 ey) {
+    Actor_SetPosRot(actor, x, y, z, actor->world.rot.x, ey, actor->world.rot.z);
+}
+
 void Actor_SetObjectDependency(PlayState* play, Actor* actor) {
     gSegments[6] = VIRTUAL_TO_PHYSICAL(play->objectCtx.status[actor->objBankIndex].segment);
 }

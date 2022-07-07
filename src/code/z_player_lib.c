@@ -864,8 +864,8 @@ Color_RGB8 sTunicColors[PLAYER_TUNIC_MAX] = {
 };
 
 Color_RGB8 sGauntletColors[] = {
-    { 255, 255, 255 },
-    { 254, 207, 15 },
+    { 255, 255, 255 }, // Silver
+    { 254, 207, 15 },  // Gold
 };
 
 Gfx* sBootDListGroups[][2] = {

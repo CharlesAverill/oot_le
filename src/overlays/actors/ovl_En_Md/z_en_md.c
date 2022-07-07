@@ -78,7 +78,7 @@ static ColliderCylinderInit sKokiriSwordColliderInit = {
         BUMP_NONE,
         OCELEM_NONE,
     },
-    { 20, 10, 0, { 0, 0, 0 } },
+    { 30, 20, 0, { 0, 0, 0 } },
 };
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
@@ -583,7 +583,11 @@ u8 EnMd_ShouldSpawn(EnMd* this, PlayState* play) {
         }
     }
 
-    if (play->sceneNum == SCENE_SPOT10 || EnMd_IsFollower(this)) {
+    if (play->sceneNum == SCENE_SPOT10 || play->sceneNum == SCENE_LEARNING01) {
+        return 1;
+    }
+
+    if (play->sceneNum == SCENE_YDAN && (play->roomCtx.curRoom.num == 0 || GET_PLAYER(play)->hasFollowingMido)) {
         return 1;
     }
 
@@ -647,11 +651,13 @@ void func_80AAB158(EnMd* this, PlayState* play) {
             switch (play->msgCtx.choiceIndex) {
                 case 0: // Yes
                     this->isFollowing = true;
+                    player->hasFollowingMido = true;
                     break;
                 case 1: // No
                     this->isFollowing = false;
-                    break;
+                    player->hasFollowingMido = false;
                     Message_CloseTextbox(play);
+                    break;
             }
         } else {
             func_800343CC(play, &this->actor, &this->unk_1E0.unk_00, this->collider.dim.radius + 30.0f, EnMd_GetText,
@@ -745,9 +751,17 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
+    if(GET_PLAYER(play)->hasFollowingMido) {
+        this->actor.params = 2;
+    }
+
     this->isFollowing = this->actor.params == 2;
     this->teleportTimer = -1;
     this->stabTimer = 0;
+
+    if(this->isFollowing) {
+        GET_PLAYER(play)->hasFollowingMido = true;
+    }
 
     Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_0);
     Actor_SetScale(&this->actor, 0.01f);
@@ -756,14 +770,6 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, FAIRY_KOKIRI);
 
-    /*
-    if (EnMd_IsFollower(this)) {
-        this->heldKokiriSword = (ObjKokiriSword*)Actor_SpawnAsChild(
-            &play->actorCtx, &this->actor, play, ACTOR_OBJ_KOKIRISWORD, this->actor.world.pos.x,
-            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
-    }
-    */
-
     if (((play->sceneNum == SCENE_SPOT04) && !GET_EVENTCHKINF(EVENTCHKINF_04)) ||
         ((play->sceneNum == SCENE_SPOT04) && GET_EVENTCHKINF(EVENTCHKINF_04) &&
          CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD)) ||
@@ -771,6 +777,26 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
         this->actor.home.pos = this->actor.world.pos;
         this->actionFunc = func_80AAB948;
         return;
+    }
+
+    if (play->sceneNum == SCENE_YDAN) {
+        switch(play->roomCtx.curRoom.num) {
+            case 0:
+                switch(play->roomCtx.prevRoom.num) {
+                    case -1: // Kokiri Forest
+                        Actor_SetPosRotY(thisx, -80, 0, 423, 0);
+                        break;
+                    case 1: // Middle room
+                        Actor_SetPosRotY(thisx, -301, 400, 400, -17922);
+                        break;
+                    case 3: // Below room
+                        Actor_SetPosRotY(thisx, 132, 0, -39, -12317);
+                        break;
+                    case 10: // Top room
+                        Actor_SetPosRotY(thisx, -423, 800, 65, -23125);
+                        break;
+                }
+        }
     }
 
     if (play->sceneNum != SCENE_KOKIRI_HOME4) {
@@ -1062,19 +1088,13 @@ void EnMd_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     EnMd* this = (EnMd*)thisx;
     Vec3f vec = { 400.0f, 0.0f, 0.0f };
 
-    if (this->skelAnime.animation == &gMidoSkelStabAnim && 4 <= this->skelAnime.curFrame &&
-               this->skelAnime.curFrame <= 6) {
+    if (this->skelAnime.animation == &gMidoSkelStabAnim && 3 <= this->skelAnime.curFrame &&
+               this->skelAnime.curFrame <= 7) {
         EnMd_SetupHurtbox(this, play);
     }
 
     if (limbIndex == ENMD_LIMB_HEAD) {
         Matrix_MultVec3f(&vec, &this->actor.focus.pos);
-    } else if (limbIndex == ENMD_LIMB_RIGHT_HAND) {
-        /*
-        Matrix_MultVec3f(&sZeroVec, &this->heldKokiriSword->actor.world.pos);
-        this->heldKokiriSword->actor.world.rot.y += Math_SinS(this->unk_214[limbIndex]) * 200.0f;
-        this->heldKokiriSword->actor.world.rot.z += Math_CosS(this->unk_236[limbIndex]) * 200.0f;
-        */
     }
 }
 

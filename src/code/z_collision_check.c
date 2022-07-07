@@ -1128,6 +1128,9 @@ void Collider_Draw(PlayState* play, Collider* collider, u8 r, u8 g, u8 b, u8 a) 
  * AREG(23) draws OC colliders, AREG(24) draws dynapolys, and AREG(25) draws bg polys
  */
 void CollisionCheck_DrawCollision(PlayState* play, CollisionCheckContext* colChkCtx) {
+    Player* player;
+    GfxPrint printer;
+    Gfx* gfx;
     Collider* collider;
     s32 i;
 
@@ -1149,6 +1152,37 @@ void CollisionCheck_DrawCollision(PlayState* play, CollisionCheckContext* colChk
     }
     BgCheck_DrawDynaCollision(play, &play->colCtx);
     BgCheck_DrawStaticCollision(play, &play->colCtx);
+
+    // Draw player position, current room number
+    player = GET_PLAYER(play);
+
+    OPEN_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
+
+    gfx = POLY_OPA_DISP + 1;
+    gSPDisplayList(OVERLAY_DISP++, gfx);
+
+    GfxPrint_Init(&printer);
+    GfxPrint_Open(&printer, gfx);
+
+    GfxPrint_SetColor(&printer, 255, 0, 255, 255);
+
+    GfxPrint_SetPos(&printer, 3, 26);
+    GfxPrint_Printf(&printer, "Room C: %d P: %d", play->roomCtx.curRoom.num, play->roomCtx.prevRoom.num);
+
+    GfxPrint_SetPos(&printer, 3, 27);
+    GfxPrint_Printf(&printer, "Rot: %d %d %d", (s32)player->actor.world.rot.x, (s32)player->actor.world.rot.y, (s32)player->actor.world.rot.z);
+
+    GfxPrint_SetPos(&printer, 3, 28);
+    GfxPrint_Printf(&printer, "Pos: %d %d %d", (s32)player->actor.world.pos.x, (s32)player->actor.world.pos.y, (s32)player->actor.world.pos.z);
+
+    gfx = GfxPrint_Close(&printer);
+    GfxPrint_Destroy(&printer);
+
+    gSPEndDisplayList(gfx++);
+    gSPBranchList(POLY_OPA_DISP, gfx);
+    POLY_OPA_DISP = gfx;
+
+    CLOSE_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
 }
 
 static ColChkResetFunc sATResetFuncs[] = {

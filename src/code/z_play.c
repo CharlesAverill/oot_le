@@ -416,6 +416,8 @@ void Play_Init(GameState* thisx) {
         osSyncPrintf("\nkawauso_data=[%x]", D_8012D1F0);
         DmaMgr_DmaRomToRam(0x03FEB000, D_8012D1F0, sizeof(D_801614D0));
     }
+
+    player->hasFollowingMido = false;
 }
 
 void Play_Update(PlayState* this) {

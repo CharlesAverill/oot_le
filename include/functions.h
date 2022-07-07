@@ -371,6 +371,8 @@ s32 TitleCard_Clear(PlayState* play, TitleCardContext* titleCtx);
 void Actor_Kill(Actor* actor);
 void Actor_SetFocus(Actor* actor, f32 yOffset);
 void Actor_SetScale(Actor* actor, f32 scale);
+void Actor_SetPosRot(Actor* actor, f32 x, f32 y, f32 z, s16 ex, s16 ey, s16 ez);
+void Actor_SetPosRotY(Actor* actor, f32 x, f32 y, f32 z, s16 ey);
 void Actor_SetObjectDependency(PlayState* play, Actor* actor);
 void func_8002D7EC(Actor* actor);
 void func_8002D868(Actor* actor);
