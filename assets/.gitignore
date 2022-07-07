@@ -6,3 +6,4 @@
 *.vtx.inc
 *.dlist.inc
 !scenes/overworld/learning01/*
+!objects/object_tido/*
