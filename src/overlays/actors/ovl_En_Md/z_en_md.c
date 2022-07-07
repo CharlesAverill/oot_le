@@ -11,6 +11,9 @@
 
 #define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_3 | ACTOR_FLAG_4 | ACTOR_FLAG_25)
 
+#define TELEPORT_WAIT 30
+#define STAB_WAIT 10
+
 void EnMd_Init(Actor* thisx, PlayState* play);
 void EnMd_Destroy(Actor* thisx, PlayState* play);
 void EnMd_Update(Actor* thisx, PlayState* play);
@@ -21,6 +24,8 @@ void func_80AAB8F8(EnMd* this, PlayState* play);
 void func_80AAB948(EnMd* this, PlayState* play);
 void func_80AABC10(EnMd* this, PlayState* play);
 void func_80AABD0C(EnMd* this, PlayState* play);
+
+static Vec3f sZeroVec = { 0.0f, 0.0f, 0.0f };
 
 const ActorInit En_Md_InitVars = {
     ACTOR_EN_MD,
@@ -34,6 +39,7 @@ const ActorInit En_Md_InitVars = {
     (ActorFunc)EnMd_Draw,
 };
 
+// NPC Collider
 static ColliderCylinderInit sCylinderInit = {
     {
         COLTYPE_NONE,
@@ -51,7 +57,28 @@ static ColliderCylinderInit sCylinderInit = {
         BUMP_NONE,
         OCELEM_ON,
     },
-    { 26, 64, 0, { 0, 0, 0 } },
+    { 26, 44, 0, { 0, 0, 0 } },
+};
+
+// Sword Collider
+static ColliderCylinderInit sKokiriSwordColliderInit = {
+    {
+        COLTYPE_NONE,
+        AT_ON | AT_TYPE_PLAYER,
+        AC_NONE,
+        OC1_NONE,
+        OC2_TYPE_PLAYER,
+        COLSHAPE_CYLINDER,
+    },
+    {
+        ELEMTYPE_UNK2,
+        { 0x00000100, 0x00, 0x01 },
+        { 0xFFCFFFFF, 0x00, 0x00 },
+        TOUCH_ON | TOUCH_SFX_NORMAL,
+        BUMP_NONE,
+        OCELEM_NONE,
+    },
+    { 20, 10, 0, { 0, 0, 0 } },
 };
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
@@ -76,6 +103,26 @@ typedef enum {
     /* 15 */ ENMD_ANIM_STAB
 } EnMdAnimation;
 
+typedef enum {
+    ENMD_LIMB_ROOT = 1,
+    ENMD_LIMB_WAIST,
+    ENMD_LIMB_LEFT_THIGH,
+    ENMD_LIMB_LEFT_LEG,
+    ENMD_LIMB_LEFT_FOOT,
+    ENMD_LIMB_RIGHT_THIGH,
+    ENMD_LIMB_RIGHT_LEG,
+    ENMD_LIMB_RIGHT_FOOT,
+    ENMD_LIMB_TORSO,
+    ENMD_LIMB_LEFT_UPPER_ARM,
+    ENMD_LIMB_LEFT_FOREARM,
+    ENMD_LIMB_LEFT_HAND,
+    ENMD_LIMB_RIGHT_UPPER_ARM,
+    ENMD_LIMB_RIGHT_FOREARM,
+    ENMD_LIMB_RIGHT_HAND,
+    ENMD_LIMB_HEAD,
+    ENMD_LIMB_SWORD
+} EnMdLimbs;
+
 static AnimationInfo sAnimationInfo[] = {
     { &gMidoHandsOnHipsIdleAnim, 0.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
     { &gMidoHandsOnHipsIdleAnim, 0.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -10.0f },
@@ -92,7 +139,7 @@ static AnimationInfo sAnimationInfo[] = {
     { &gMidoRaiseHand2Anim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -1.0f },
     { &gMidoAngryHeadTurnAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -1.0f },
     { &gMidoWalkingAnim, 3.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -1.0f },
-    { &gMidoSkelStabAnim, 0.7f, 0.0f, -1.0f, ANIMMODE_LOOP, -1.0f }
+    { &gMidoSkelStabAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_ONCE, -1.0f }
 };
 
 bool EnMd_IsFollower(EnMd* this) {
@@ -684,10 +731,15 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gMidoSkel, NULL, this->jointTable, this->morphTable, 17);
 
+    // NPC cylinder
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL,
                             EnMd_IsFollower(this) ? &sColChkInfoInit_Follower : &sColChkInfoInit);
+    // Kokiri sword quad
+    Collider_InitCylinder(play, &this->kokiriSwordCylinder);
+    Collider_SetCylinder(play, &this->kokiriSwordCylinder, &this->actor, &sKokiriSwordColliderInit);
+
     if (!EnMd_ShouldSpawn(this, play)) {
         Actor_Kill(&this->actor);
         return;
@@ -695,6 +747,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
 
     this->isFollowing = this->actor.params == 2;
     this->teleportTimer = -1;
+    this->stabTimer = 0;
 
     Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_0);
     Actor_SetScale(&this->actor, 0.01f);
@@ -702,6 +755,14 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
     this->alpha = 255;
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, FAIRY_KOKIRI);
+
+    /*
+    if (EnMd_IsFollower(this)) {
+        this->heldKokiriSword = (ObjKokiriSword*)Actor_SpawnAsChild(
+            &play->actorCtx, &this->actor, play, ACTOR_OBJ_KOKIRISWORD, this->actor.world.pos.x,
+            this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, 0);
+    }
+    */
 
     if (((play->sceneNum == SCENE_SPOT04) && !GET_EVENTCHKINF(EVENTCHKINF_04)) ||
         ((play->sceneNum == SCENE_SPOT04) && GET_EVENTCHKINF(EVENTCHKINF_04) &&
@@ -722,6 +783,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
 void EnMd_Destroy(Actor* thisx, PlayState* play) {
     EnMd* this = (EnMd*)thisx;
     Collider_DestroyCylinder(play, &this->collider);
+    Collider_DestroyCylinder(play, &this->kokiriSwordCylinder);
 }
 
 void func_80AAB874(EnMd* this, PlayState* play) {
@@ -741,6 +803,21 @@ void func_80AAB8F8(EnMd* this, PlayState* play) {
     func_80AAA93C(this);
 }
 
+void EnMd_SetupHurtbox(EnMd* this, PlayState* play) {
+    Vec3s passInPosition;
+
+    passInPosition.x = (s16)(this->actor.world.pos.x + Math_SinS(this->actor.shape.rot.y) * 40.0f);
+    passInPosition.y = (s16)this->actor.world.pos.y + this->collider.dim.height / 2;
+    passInPosition.z = (s16)(this->actor.world.pos.z + Math_CosS(this->actor.shape.rot.y) * 40.0f);
+
+    this->kokiriSwordCylinder.base.colType = COLTYPE_METAL;
+    this->kokiriSwordCylinder.info.toucher.dmgFlags = DMG_SLASH_KOKIRI;
+
+    Collider_SetCylinderPosition(&this->kokiriSwordCylinder, &passInPosition);
+
+    CollisionCheck_SetAT(play, &play->colChkCtx, &this->kokiriSwordCylinder.base);
+}
+
 void func_80AAB948(EnMd* this, PlayState* play) {
     Player* player = GET_PLAYER(play);
     f32 temp;
@@ -753,13 +830,16 @@ void func_80AAB948(EnMd* this, PlayState* play) {
 
     func_80AAAA24(this);
 
-    // Follow Link
+    // Follow Link/Targeted
     if (EnMd_IsFollower(this) && this->isFollowing) {
 
         if (player->targetActor != NULL && player->targetActor->id != this->actor.id) {
             targetActor = player->targetActor;
+            this->targetingEnemy = true;
         } else {
             targetActor = &(player->actor);
+            this->targetingEnemy = false;
+            this->stabTimer = 0;
         }
 
         this->actor.gravity = -2.0f;
@@ -768,9 +848,9 @@ void func_80AAB948(EnMd* this, PlayState* play) {
         this->actor.shape.rot.y = this->actor.world.rot.y;
 
         // If y dist is big and player isn't climbing
-        if (this->actor.yDistToPlayer > 100 && !(player->stateFlags1 & PLAYER_STATE1_21)) {
+        if (fabsf(this->actor.yDistToPlayer) > 100 && !(player->stateFlags1 & PLAYER_STATE1_21)) {
             if (this->teleportTimer == -1) {
-                this->teleportTimer = 30;
+                this->teleportTimer = TELEPORT_WAIT;
             } else if (this->teleportTimer == 1) {
                 this->actor.world.pos = player->actor.world.pos;
                 this->teleportTimer = -1;
@@ -779,11 +859,15 @@ void func_80AAB948(EnMd* this, PlayState* play) {
             }
         }
 
-        if (Actor_WorldDistXZToActor(&(this->actor), targetActor) > 200) {
+
+
+        if (Math_Vec3f_DistXZ(&this->actor.world.pos, &targetActor->focus.pos) > 200) {
             Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
 
-            this->actor.world.pos.x = (player->actor.world.pos.x + this->actor.world.pos.x) / 2;
-            this->actor.world.pos.z = (player->actor.world.pos.z + this->actor.world.pos.z) / 2;
+            if(targetActor == &player->actor) {
+                this->actor.world.pos.x = (player->actor.world.pos.x + this->actor.world.pos.x) / 2;
+                this->actor.world.pos.z = (player->actor.world.pos.z + this->actor.world.pos.z) / 2;
+            }
         } else {
             this->actor.speedXZ = 0.0f;
             temp = Actor_WorldDistXZToActor(&(this->actor), targetActor);
@@ -806,8 +890,17 @@ void func_80AAB948(EnMd* this, PlayState* play) {
                 if (targetActor == &(player->actor) && this->skelAnime.animation != &gMidoHandsOnHipsIdleAnim) {
                     Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
                     // If not moving and targeting another actor, stab
-                } else if (targetActor != &(player->actor) && this->skelAnime.animation != &gMidoSkelStabAnim) {
-                    Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_STAB);
+                } else if (targetActor != &(player->actor) && (this->skelAnime.animation != &gMidoSkelStabAnim ||
+                    (this->skelAnime.animation == &gMidoSkelStabAnim && this->skelAnime.curFrame == this->skelAnime.endFrame))) {
+                    if(this->stabTimer == -1) {
+                        Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
+                        this->stabTimer = STAB_WAIT;
+                    } else if(this->stabTimer == 0) {
+                        Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_STAB);
+                        this->stabTimer = -1;
+                    } else {
+                        this->stabTimer--;
+                    }
                 }
             }
 
@@ -922,37 +1015,44 @@ void EnMd_Update(Actor* thisx, PlayState* play) {
 
     Collider_UpdateCylinder(&this->actor, &this->collider);
     CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
+
     SkelAnime_Update(&this->skelAnime);
     EnMd_UpdateEyes(this);
     func_80AAB5A4(this, play);
+
     if (!EnMd_IsFollower(this) || this->skelAnime.animation == &gMidoWalkingAnim) {
         Actor_MoveForward(&this->actor);
     }
+
     func_80AAB158(this, play);
+
     Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_2);
+
     this->actionFunc(this, play);
+
+    Collider_ResetCylinderAT(play, &this->kokiriSwordCylinder.base);
 }
 
 s32 EnMd_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx, Gfx** gfx) {
     EnMd* this = (EnMd*)thisx;
     Vec3s vec;
 
-    if (limbIndex == 16 && this->skelAnime.animation != &gMidoSkelStabAnim) {
+    if (limbIndex == ENMD_LIMB_HEAD && !this->targetingEnemy) {
         Matrix_Translate(1200.0f, 0.0f, 0.0f, MTXMODE_APPLY);
         vec = this->unk_1E0.unk_08;
         Matrix_RotateX(BINANG_TO_RAD_ALT(vec.y), MTXMODE_APPLY);
         Matrix_RotateZ(BINANG_TO_RAD_ALT(vec.x), MTXMODE_APPLY);
         Matrix_Translate(-1200.0f, 0.0f, 0.0f, MTXMODE_APPLY);
-    }
-    if (limbIndex == 9) {
+    } else if (limbIndex == ENMD_LIMB_TORSO) {
         vec = this->unk_1E0.unk_0E;
         Matrix_RotateX(BINANG_TO_RAD_ALT(vec.x), MTXMODE_APPLY);
         Matrix_RotateY(BINANG_TO_RAD_ALT(vec.y), MTXMODE_APPLY);
-    }
-
-    if (((limbIndex == 9) || (limbIndex == 10)) || (limbIndex == 13)) {
+    } else if (((limbIndex == ENMD_LIMB_TORSO) || (limbIndex == ENMD_LIMB_LEFT_UPPER_ARM)) ||
+               (limbIndex == ENMD_LIMB_RIGHT_UPPER_ARM)) {
         rot->y += Math_SinS(this->unk_214[limbIndex]) * 200.0f;
         rot->z += Math_CosS(this->unk_236[limbIndex]) * 200.0f;
+    } else if (limbIndex == ENMD_LIMB_RIGHT_HAND) {
+        *dList = gMidoRightHandKokiriSwordDL;
     }
 
     return false;
@@ -962,8 +1062,19 @@ void EnMd_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     EnMd* this = (EnMd*)thisx;
     Vec3f vec = { 400.0f, 0.0f, 0.0f };
 
-    if (limbIndex == 16) {
+    if (this->skelAnime.animation == &gMidoSkelStabAnim && 4 <= this->skelAnime.curFrame &&
+               this->skelAnime.curFrame <= 6) {
+        EnMd_SetupHurtbox(this, play);
+    }
+
+    if (limbIndex == ENMD_LIMB_HEAD) {
         Matrix_MultVec3f(&vec, &this->actor.focus.pos);
+    } else if (limbIndex == ENMD_LIMB_RIGHT_HAND) {
+        /*
+        Matrix_MultVec3f(&sZeroVec, &this->heldKokiriSword->actor.world.pos);
+        this->heldKokiriSword->actor.world.rot.y += Math_SinS(this->unk_214[limbIndex]) * 200.0f;
+        this->heldKokiriSword->actor.world.rot.z += Math_CosS(this->unk_236[limbIndex]) * 200.0f;
+        */
     }
 }
 

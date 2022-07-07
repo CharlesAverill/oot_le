@@ -15,6 +15,7 @@ typedef struct EnMd {
     /* 0x014C */ SkelAnime skelAnime;
     /* 0x0190 */ EnMdActionFunc actionFunc;
     /* 0x0194 */ ColliderCylinder collider;
+    ColliderCylinder kokiriSwordCylinder;
     /* 0x01E0 */ struct_80034A14_arg1 unk_1E0;
     /* 0x0208 */ u8 unk_208;
     /* 0x0209 */ u8 unk_209;
@@ -30,7 +31,9 @@ typedef struct EnMd {
     /* 0x02BE */ Vec3s morphTable[17];
     bool isRunning;
     bool isFollowing;
-    s32 teleportTimer;
+    bool targetingEnemy;
+    s8 teleportTimer;
+    s8 stabTimer;
 } EnMd; // size = 0x0324
 
 #endif

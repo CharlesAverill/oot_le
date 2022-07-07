@@ -12,7 +12,7 @@ extern WaterBox learning01_waterBoxes[];
 extern CollisionHeader learning01_collisionHeader;
 extern SCmdBase learning01_room_0_header00[];
 extern s16 learning01_room_0_header00_objectList[5];
-extern ActorEntry learning01_room_0_header00_actorList[5];
+extern ActorEntry learning01_room_0_header00_actorList[6];
 extern SCmdBase learning01_room_1_header00[];
 extern MeshHeader0 learning01_room_0_meshHeader;
 extern MeshHeader01Entry  learning01_room_0_meshDListEntry[1];

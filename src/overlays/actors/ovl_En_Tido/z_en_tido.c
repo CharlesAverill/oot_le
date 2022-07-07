@@ -279,7 +279,7 @@ void EnTido_Draw(Actor* thisx, PlayState* play) {
 
     this->actor.shape.shadowAlpha = this->alpha;
 
-    OPEN_DISPS(play->state.gfxCtx, "../z_en_tido.c", 129);
+    OPEN_DISPS(play->state.gfxCtx, "../z_en_tido.c", __LINE__);
     if (this->alpha == 255) {
         gSPSegment(POLY_OPA_DISP++, 0x08,
                    EnTido_SetEnvColor(play->state.gfxCtx, tunicColor.r, tunicColor.g, tunicColor.b, 255));
@@ -295,5 +295,5 @@ void EnTido_Draw(Actor* thisx, PlayState* play) {
                    EnTido_SetEnvColor(play->state.gfxCtx, bootsColor.r, bootsColor.g, bootsColor.b, bootsColor.a));
         func_80034CC4(play, &this->skelAnime, EnTido_OverrideLimbDraw, EnTido_PostLimbDraw, &this->actor, this->alpha);
     }
-    CLOSE_DISPS(play->state.gfxCtx, "../z_en_tido.c", 245);
+    CLOSE_DISPS(play->state.gfxCtx, "../z_en_tido.c", __LINE__);
 }

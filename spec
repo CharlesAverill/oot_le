@@ -3107,6 +3107,12 @@ beginseg
 endseg
 
 beginseg
+    name "ovl_Obj_KokiriSword"
+    include "build/src/overlays/actors/ovl_Obj_KokiriSword/z_obj_kokirisword.o"
+    include "build/src/overlays/actors/ovl_Obj_KokiriSword/ovl_Obj_KokiriSword_reloc.o"
+endseg
+
+beginseg
     name "ovl_End_Title"
     include "build/src/overlays/actors/ovl_End_Title/z_end_title.o"
 endseg
