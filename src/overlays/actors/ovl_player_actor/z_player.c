@@ -12256,6 +12256,7 @@ void func_8084E6D4(Player* this, PlayState* play) {
                                 this->actor.world.pos.y + 100.0f, this->actor.world.pos.z, 0, 0, 0, 0);
                     func_8083C0E8(this, play);
                 } else {
+                    Message_StartTextbox(play, 0x71C0, &this->actor);
                     this->actor.colChkInfo.damage = 0;
                     func_80837C0C(play, this, 3, 0.0f, 0.0f, 0, 20);
                 }

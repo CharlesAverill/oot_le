@@ -34,6 +34,7 @@ typedef struct EnMd {
     bool targetingEnemy;
     s8 teleportTimer;
     s8 stabTimer;
+    Actor* targetActor;
 } EnMd; // size = 0x0324
 
 #endif

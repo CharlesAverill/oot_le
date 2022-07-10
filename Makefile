@@ -13,7 +13,7 @@ NON_MATCHING ?= 1
 # If ORIG_COMPILER is 1, compile with QEMU_IRIX and the original compiler
 ORIG_COMPILER ?= 0
 # If COMPILER is "gcc", compile with GCC instead of IDO.
-COMPILER ?= ido
+COMPILER ?= gcc
 
 CFLAGS ?=
 CPPFLAGS ?=
