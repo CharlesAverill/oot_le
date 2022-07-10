@@ -51,6 +51,7 @@ graphs/
 !assets/textures/common/*
 !assets/scenes/overworld/learning01/*
 .extracted-assets.json
+!milestones/*
 
 # Docs
 !docs/tutorial/

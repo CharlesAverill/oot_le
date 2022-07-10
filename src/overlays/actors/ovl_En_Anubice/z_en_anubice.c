@@ -356,13 +356,23 @@ void EnAnubice_Die(EnAnubice* this, PlayState* play) {
     }
 }
 
+void EnAnubice_FireDamage(EnAnubice* this, PlayState* play) {
+    Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
+    this->actor.flags &= ~ACTOR_FLAG_0;
+    Enemy_StartFinishingBlow(play, &this->actor);
+    Audio_PlayActorSound2(&this->actor, NA_SE_EN_ANUBIS_DEAD);
+    this->actionFunc = EnAnubice_SetupDie;
+}
+
 void EnAnubice_Update(Actor* thisx, PlayState* play) {
     f32 zero;
     BgHidanCurtain* flameCircle;
     s32 i;
     Vec3f baseKnockbackVelocity;
     Vec3f rotatedKnockbackVelocity;
+    Vec3f tipToFlame;
     EnAnubice* this = (EnAnubice*)thisx;
+    Player* player = GET_PLAYER(play);
 
     if ((this->actionFunc != EnAnubice_SetupDie) && (this->actionFunc != EnAnubice_Die) &&
         (this->actor.shape.yOffset == 0.0f)) {
@@ -382,14 +392,18 @@ void EnAnubice_Update(Actor* thisx, PlayState* play) {
             }
         }
 
+        if (player->heldItemActionParam == PLAYER_AP_STICK && player->unk_860 > 0) {
+            Math_Vec3f_Diff(&player->meleeWeaponInfo[0].tip, &this->actor.world.pos, &tipToFlame);
+            tipToFlame.y -= 67.0f;
+            if ((SQ(tipToFlame.x) + SQ(tipToFlame.y) + SQ(tipToFlame.z)) < SQ(20.0f)) {
+                EnAnubice_FireDamage(this, play);
+            }
+        }
+
         if (this->collider.base.acFlags & AC_HIT) {
             this->collider.base.acFlags &= ~AC_HIT;
             if (this->actor.colChkInfo.damageEffect == ANUBICE_DMGEFF_FIRE) {
-                Actor_ChangeCategory(play, &play->actorCtx, &this->actor, ACTORCAT_PROP);
-                this->actor.flags &= ~ACTOR_FLAG_0;
-                Enemy_StartFinishingBlow(play, &this->actor);
-                Audio_PlayActorSound2(&this->actor, NA_SE_EN_ANUBIS_DEAD);
-                this->actionFunc = EnAnubice_SetupDie;
+                EnAnubice_FireDamage(this, play);
                 return;
             }
 
