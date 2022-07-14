@@ -3113,6 +3113,12 @@ beginseg
 endseg
 
 beginseg
+    name "ovl_Obj_BeanPlatform"
+    include "build/src/overlays/actors/ovl_Obj_BeanPlatform/z_obj_beanplatform.o"
+    include "build/src/overlays/actors/ovl_Obj_BeanPlatform/ovl_Obj_BeanPlatform_reloc.o"
+endseg
+
+beginseg
     name "ovl_End_Title"
     include "build/src/overlays/actors/ovl_End_Title/z_end_title.o"
 endseg

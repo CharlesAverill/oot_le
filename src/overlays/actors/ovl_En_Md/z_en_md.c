@@ -756,7 +756,6 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     }
 
-
     // Kokiri sword quad
     Collider_InitCylinder(play, &this->kokiriSwordCylinder);
     Collider_SetCylinder(play, &this->kokiriSwordCylinder, &this->actor, &sKokiriSwordColliderInit);
@@ -796,16 +795,18 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
         */
         switch(play->roomCtx.curRoom.num) {
             case 0: // Main room
-                switch(play->roomCtx.prevRoom.num) {
-                    case 1: // Middle room
-                        Actor_SetPosRotY(thisx, -301, 400, 352, -10022);
-                        break;
-                    case 3: // Below room
-                        Actor_SetPosRotY(thisx, 132, 0, -39, -12317);
-                        break;
-                    case 10: // Top room
-                        Actor_SetPosRotY(thisx, -423, 800, 65, -23125);
-                        break;
+                if(this->isFollowing) {
+                    switch(play->roomCtx.prevRoom.num) {
+                        case 1: // Middle room
+                            Actor_SetPosRotY(thisx, -301, 400, 352, -10022);
+                            break;
+                        case 3: // Below room
+                            Actor_SetPosRotY(thisx, 132, 0, -39, -12317);
+                            break;
+                        case 10: // Top room
+                            Actor_SetPosRotY(thisx, -423, 800, 65, -23125);
+                            break;
+                    }
                 }
                 break;
             case 1: // Between main and compass

@@ -38,4 +38,6 @@ typedef struct ObjBean {
     /* 0x01F7 */ u8 stateFlags;
 } ObjBean; // size = 0x01F8
 
+bool ObjBean_IsCustomMovingPlatform(ObjBean* this);
+
 #endif

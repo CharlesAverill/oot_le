@@ -1134,6 +1134,8 @@ void CollisionCheck_DrawCollision(PlayState* play, CollisionCheckContext* colChk
     Collider* collider;
     s32 i;
 
+    int debugY;
+
     if(!HREG(76)) {
         return;
     }
@@ -1153,7 +1155,7 @@ void CollisionCheck_DrawCollision(PlayState* play, CollisionCheckContext* colChk
     BgCheck_DrawDynaCollision(play, &play->colCtx);
     BgCheck_DrawStaticCollision(play, &play->colCtx);
 
-    // Draw player position, current room number
+    // QLEFT DRAWING
     player = GET_PLAYER(play);
 
     OPEN_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
@@ -1166,13 +1168,20 @@ void CollisionCheck_DrawCollision(PlayState* play, CollisionCheckContext* colChk
 
     GfxPrint_SetColor(&printer, 255, 0, 255, 255);
 
-    GfxPrint_SetPos(&printer, 3, 26);
-    GfxPrint_Printf(&printer, "Room C: %d P: %d", play->roomCtx.curRoom.num, play->roomCtx.prevRoom.num);
+    debugY = 26;
 
-    GfxPrint_SetPos(&printer, 3, 27);
+    GfxPrint_SetPos(&printer, 3, debugY++);
+    /*
+    //GfxPrint_Printf(&printer, "Room C: %d P: %d", play->roomCtx.curRoom.num, play->roomCtx.prevRoom.num);
+    if(player->doorActor != NULL) {
+        GfxPrint_Printf(&printer, "Door ID: %d | Last opened: %d", player->doorActor->params, player->lastOpenedDoorParams);
+    }
+    */
+
+    GfxPrint_SetPos(&printer, 3, debugY++);
     GfxPrint_Printf(&printer, "Rot: %d %d %d", (s32)player->actor.world.rot.x, (s32)player->actor.world.rot.y, (s32)player->actor.world.rot.z);
 
-    GfxPrint_SetPos(&printer, 3, 28);
+    GfxPrint_SetPos(&printer, 3, debugY++);
     GfxPrint_Printf(&printer, "Pos: %d %d %d", (s32)player->actor.world.pos.x, (s32)player->actor.world.pos.y, (s32)player->actor.world.pos.z);
 
     gfx = GfxPrint_Close(&printer);
