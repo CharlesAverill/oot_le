@@ -19,9 +19,10 @@ baserom/
 docs/doxygen/
 *.elf
 *.sra
-# *.z64
-# *.n64
-# *.v64
+*.z64
+*.n64
+*.v64
+*.bps
 baserom*
 *.map
 *.dump
