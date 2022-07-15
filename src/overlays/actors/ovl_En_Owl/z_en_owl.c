@@ -363,6 +363,10 @@ void func_80ACA7E0(EnOwl* this, PlayState* play) {
 }
 
 void EnOwl_ConfirmKokiriMessage(EnOwl* this, PlayState* play) {
+    if(Message_ShouldAdvance(play)) {
+        this->actionFunc = func_80ACA76C;
+    }
+    /*
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_CHOICE && Message_ShouldAdvance(play)) {
         switch (play->msgCtx.choiceIndex) {
             case OWL_REPEAT:
@@ -374,6 +378,7 @@ void EnOwl_ConfirmKokiriMessage(EnOwl* this, PlayState* play) {
                 break;
         }
     }
+    */
 }
 
 void EnOwl_WaitOutsideKokiri(EnOwl* this, PlayState* play) {

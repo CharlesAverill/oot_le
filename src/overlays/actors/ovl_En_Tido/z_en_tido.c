@@ -59,28 +59,6 @@ static AnimationInfo sAnimationInfo[] = {
     { &gTidoSkelHammeringAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, -1.0f },
 };
 
-u8 EnTido_ShouldSpawn(EnTido* this, PlayState* play) {
-    if (play->sceneNum == SCENE_SPOT04) {
-        if (!GET_EVENTCHKINF(EVENTCHKINF_1C) && !GET_EVENTCHKINF(EVENTCHKINF_40)) {
-            return 1;
-        }
-    }
-
-    if (play->sceneNum == SCENE_KOKIRI_HOME4) {
-        if (GET_EVENTCHKINF(EVENTCHKINF_1C) || GET_EVENTCHKINF(EVENTCHKINF_40)) {
-            if (!LINK_IS_ADULT) {
-                return 1;
-            }
-        }
-    }
-
-    if (play->sceneNum == SCENE_SPOT10 || play->sceneNum == SCENE_LEARNING01) {
-        return 1;
-    }
-
-    return 0;
-}
-
 void EnTido_Init(Actor* thisx, PlayState* play) {
     EnTido* this = (EnTido*)thisx;
     s32 pad;
@@ -99,10 +77,13 @@ void EnTido_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
+    
+    /*
     if (!EnTido_ShouldSpawn(this, play)) {
         Actor_Kill(&this->actor);
         return;
     }
+    */
 
     Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENTIDO_HAMMERING_ANIM);
     Actor_SetScale(&this->actor, 0.01f);
