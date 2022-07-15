@@ -28,10 +28,11 @@ s16 learning01_room_0_header00_objectList[5] = {
 };
 
 ActorEntry learning01_room_0_header00_actorList[6] = {
-	{ ACTOR_EN_DEKUBABA, -310, -190, -307, 0, 0, 0, 0x0000 },
-	{ ACTOR_OBJ_BEANPLATFORM, -105, -108, -345, 0, 0, 0, 0x0489 },
-	{ ACTOR_EN_WOOD02, -232, -190, 250, 0, 0, 0, 0x0001 },
 	{ ACTOR_EN_ZO, 61, -190, -345, 0, 0, 0, 0x0009 },
-	{ ACTOR_EN_HORSE_GANON, 324, 56, -777, 0, 0, 0, 0x0000 },
+	{ ACTOR_EN_DEKUBABA, -310, -190, -307, 0, 0, 0, 0x0000 },
+	{ ACTOR_OBJ_BEANPLATFORM, -105, -108, -345, 0, 0, 0, 0x0441 },
 	{ ACTOR_EN_KAREBABA, -311, -190, -233, 0, 0, 0, 0x0001 },
+	{ ACTOR_EN_WOOD02, -232, -190, 250, 0, 0, 0, 0x0001 },
+	{ ACTOR_EN_HORSE_GANON, 324, 56, -777, 0, 0, 0, 0x0000 },
 };
+

@@ -7,6 +7,7 @@
 #include "vt.h"
 #include "z_item_shield.h"
 #include "assets/objects/object_link_child/object_link_child.h"
+#include "assets/objects/object_gi_sword_1/object_gi_sword_1.h"
 
 #define FLAGS ACTOR_FLAG_4
 
@@ -64,10 +65,16 @@ void ItemShield_Init(Actor* thisx, PlayState* play) {
     this->timer = 0;
     this->unk_19C = 0;
 
+    this->display = true;
+
+    Actor_SetScale(&this->actor, 0.01f);
+
     switch (this->actor.params) {
         case 0:
+        case 5:
+        this->actor.shape.rot.x = 0x4000;
+        case 6:
             ActorShape_Init(&this->actor.shape, 1400.0f, NULL, 0.0f);
-            this->actor.shape.rot.x = 0x4000;
             ItemShield_SetupAction(this, func_80B86BC8);
             break;
 
@@ -84,7 +91,10 @@ void ItemShield_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    Actor_SetScale(&this->actor, 0.01f);
+    if(this->actor.params == 5) {
+        this->display = false;
+    }
+
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     osSyncPrintf(VT_FGCOL(GREEN) "Item_Shild %d \n" VT_RST, this->actor.params);
@@ -124,7 +134,12 @@ void func_80B86BC8(ItemShield* this, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    func_8002F434(&this->actor, play, GI_SHIELD_DEKU, 30.0f, 50.0f);
+    if(this->actor.params == 6) {
+        func_8002F434(&this->actor, play, GI_SWORD_KOKIRI, 75.0f, 50.0f);
+    } else {
+        func_8002F434(&this->actor, play, GI_SHIELD_DEKU, 30.0f, 50.0f);
+    }
+
     if (this->collider.base.acFlags & AC_HIT) {
         ItemShield_SetupAction(this, func_80B86AC8);
         this->actor.velocity.y = 4.0f;
@@ -212,12 +227,26 @@ void ItemShield_Update(Actor* thisx, PlayState* play) {
     ItemShield* this = (ItemShield*)thisx;
 
     this->actionFunc(this, play);
+
+    if(this->actor.params == 6) {
+        this->actor.shape.rot.y += 1000;
+    }
 }
 
 void ItemShield_Draw(Actor* thisx, PlayState* play) {
     ItemShield* this = (ItemShield*)thisx;
 
-    if (!(this->unk_19C & 2)) {
+    if(this->display && this->actor.params == 6) {
+        OPEN_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
+
+        Gfx_SetupDL_25Opa(play->state.gfxCtx);
+        gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx, __FILE__, __LINE__),
+                  G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
+        //gSPDisplayList(POLY_OPA_DISP++, gGiKokiriSwordDL);
+        gSPDisplayList(POLY_OPA_DISP++, gLinkChildKokiriSwordDL);
+
+        CLOSE_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
+    } else if (!(this->unk_19C & 2) && this->display) {
         OPEN_DISPS(play->state.gfxCtx, "../z_item_shield.c", 457);
         Gfx_SetupDL_25Opa(play->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx, "../z_item_shield.c", 460),

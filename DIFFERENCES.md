@@ -3,8 +3,8 @@
 | Change from base game | Status |
 | --------------------- | ------ |
 | Link carves the Slingshot before entering the Deku Tree | :ballot_box_with_check: |
-| Mido battles Gohma with Link | :black_square_button: |
-| Link carves the Deku Shield after defeating Gohma | :black_square_button: |
+| Mido battles Gohma with Link | :ballot_box_with_check: |
+| Link carves the Deku Shield, gets Kokiri Sword after defeating Gohma | :ballot_box_with_check: |
 | Kaepora Gaebora flies over Link as he leaves Kokiri Forest, rather than talking to him | :black_square_button: |
 | Link plays with Zelda in Hyrule Castle Town Square before discovering who she is | :black_square_button: |
 | Impa greets Link in Hyrule Castle Town Square | :black_square_button: |

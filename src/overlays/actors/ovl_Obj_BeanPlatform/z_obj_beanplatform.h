@@ -59,7 +59,6 @@ typedef struct ObjBeanPlatform {
     s8 movementSpeed;
     s8 velocity;
     u16 maxDistance;
-    u8 frameCounter;
 } ObjBeanPlatform;
 
 #endif

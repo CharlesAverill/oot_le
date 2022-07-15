@@ -79,8 +79,6 @@ void ObjBeanPlatform_Init(Actor* thisx, PlayState* play) {
     }
 
     this->maxDistance = ((this->dyna.actor.params >> 9) & 0xF) * 50;
-
-    this->frameCounter = 0;
 }
 
 void ObjBeanPlatform_Destroy(Actor* thisx, PlayState* play) {
@@ -92,8 +90,6 @@ void ObjBeanPlatform_Destroy(Actor* thisx, PlayState* play) {
 
 void ObjBeanPlatform_Update(Actor* thisx, PlayState* play) {
     ObjBeanPlatform* this = (ObjBeanPlatform*)thisx;
-
-    this->frameCounter++;
 
     switch(this->type) {
         case BEANPLATFORM_YMOVE:

@@ -565,6 +565,11 @@ s16 func_80AAAF04(PlayState* play, Actor* thisx) {
             }
             return 0;
         case TEXT_STATE_EVENT:
+            if(!this->spawnedKokiriSword) {
+                this->spawnedKokiriSword = true;
+                Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_SHIELD, this->actor.home.pos.x,
+                                   this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0, 6);
+            }
             if (Message_ShouldAdvance(play)) {
                 return 2;
             }

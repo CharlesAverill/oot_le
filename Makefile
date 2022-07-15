@@ -313,6 +313,11 @@ build/assets/%.o: assets/%.c
 	$(CC) -c $(CFLAGS) $(MIPS_VERSION) $(OPTFLAGS) -o $@ $<
 	$(OBJCOPY) -O binary $@ $@.bin
 
+build/src/code/z_kanfont.o: assets/text/message_data.h
+build/src/code/z_kanfont.o: assets/text/message_data_staff.h
+build/src/code/z_message_PAL.o: assets/text/message_data.h
+build/src/code/z_message_PAL.o: assets/text/message_data_staff.h
+
 build/src/%.o: src/%.s
 	$(CPP) $(CPPFLAGS) -Iinclude $< | $(AS) $(ASFLAGS) -o $@
 

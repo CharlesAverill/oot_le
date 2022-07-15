@@ -17,6 +17,7 @@ typedef struct ItemShield {
     /* 0x019E */ u8 unk_19E[8];
     /* 0x01A8 */ Vec3f unk_1A8[8];
     /* 0x0208 */ ItemShieldActionFunc actionFunc;
+    bool display;
 } ItemShield; // size = 0x020C
 
 #endif

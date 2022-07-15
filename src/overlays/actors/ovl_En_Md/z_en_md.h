@@ -35,6 +35,7 @@ typedef struct EnMd {
     s8 teleportTimer;
     s8 stabTimer;
     Actor* targetActor;
+    bool spawnedKokiriSword;
 } EnMd; // size = 0x0324
 
 #endif
