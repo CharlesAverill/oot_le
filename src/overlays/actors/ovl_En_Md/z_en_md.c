@@ -143,7 +143,7 @@ static AnimationInfo sAnimationInfo[] = {
 };
 
 bool EnMd_IsFollower(EnMd* this) {
-    return this->actor.params & IS_FOLLOWER_MASK;
+    return (this->actor.params & IS_FOLLOWER_MASK) != 0;
 }
 
 void func_80AAA250(EnMd* this) {
@@ -754,7 +754,11 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
 
+    this->actor.targetMode = 6;
+
     if(EnMd_IsFollower(this)) {
+        this->actor.targetMode = 10;
+        this->actor.flags &= ~ACTOR_FLAG_0;
         this->collider.dim.radius /= 2;
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit_Follower);
     } else {
@@ -778,11 +782,8 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
     this->teleportTimer = -1;
     this->stabTimer = 0;
 
-    this->actor.targetMode = 6;
-
     if(this->isFollowing) {
         GET_PLAYER(play)->hasFollowingMido = true;
-        this->actor.targetMode = 0;
     }
 
     Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_0);

@@ -371,36 +371,3 @@ s32 GfxPrint_Printf(GfxPrint* this, const char* fmt, ...) {
 
     return ret;
 }
-
-void Screen_Printf(PlayState* play, s32 x, s32 y, const char* fstring, ...) {
-    GfxPrint printer;
-    Gfx* gfx;
-    char* string;
-    va_list args;
-    va_start(args, fstring);
-
-    OPEN_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
-
-    gfx = POLY_OPA_DISP + 1;
-    gSPDisplayList(OVERLAY_DISP++, gfx);
-
-    GfxPrint_Init(&printer);
-    GfxPrint_Open(&printer, gfx);
-
-    GfxPrint_SetColor(&printer, 255, 0, 255, 255);
-    GfxPrint_SetPos(&printer, x, y);
-
-    vsprintf(string, fstring, args);
-    GfxPrint_Printf(&printer, "%s", string);
-
-    gfx = GfxPrint_Close(&printer);
-    GfxPrint_Destroy(&printer);
-
-    gSPEndDisplayList(gfx++);
-    gSPBranchList(POLY_OPA_DISP, gfx);
-    POLY_OPA_DISP = gfx;
-
-    CLOSE_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
-
-    va_end(args);
-}

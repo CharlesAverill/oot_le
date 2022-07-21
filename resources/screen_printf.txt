@@ -1,0 +1,24 @@
+GfxPrint printer;
+Gfx* gfx;
+
+OPEN_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
+
+gfx = POLY_OPA_DISP + 1;
+gSPDisplayList(OVERLAY_DISP++, gfx);
+
+GfxPrint_Init(&printer);
+GfxPrint_Open(&printer, gfx);
+
+GfxPrint_SetColor(&printer, 255, 0, 255, 255);
+GfxPrint_SetPos(&printer, 10, 10);
+
+GfxPrint_Printf(&printer, "%d", 5);
+
+gfx = GfxPrint_Close(&printer);
+GfxPrint_Destroy(&printer);
+
+gSPEndDisplayList(gfx++);
+gSPBranchList(POLY_OPA_DISP, gfx);
+POLY_OPA_DISP = gfx;
+
+CLOSE_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
