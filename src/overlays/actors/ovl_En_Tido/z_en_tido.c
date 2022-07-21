@@ -77,7 +77,7 @@ void EnTido_Init(Actor* thisx, PlayState* play) {
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
-    
+
     /*
     if (!EnTido_ShouldSpawn(this, play)) {
         Actor_Kill(&this->actor);
@@ -187,8 +187,9 @@ void EnTido_SetupGetItem(EnTido* this, PlayState* play) {
     f32 xzRange;
     f32 yRange;
 
-    if (INV_CONTENT(SLOT_SLINGSHOT) != ITEM_SLINGSHOT) {
+    if (!this->tookSticks) {
         Inventory_ChangeAmmo(ITEM_STICK, -2);
+        this->tookSticks = true;
     }
 
     yRange = fabsf(this->actor.yDistToPlayer) * 2.0f;

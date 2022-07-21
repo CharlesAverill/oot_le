@@ -18,6 +18,7 @@ typedef struct EnTido {
     Vec3s morphTable[17];
     f32 appearDist;
     f32 alpha;
+    bool tookSticks;
 } EnTido;
 
 #endif

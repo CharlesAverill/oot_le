@@ -792,6 +792,10 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, FAIRY_KOKIRI);
 
+    if (EnMd_GetText(play, this) == 0x1045) {
+        Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_SHIELD, 829, 119, -348, 0, 0, 0, 5);
+    }
+
     if (play->sceneNum == SCENE_YDAN) {
         /*
         // Spawn directly in front of Link
