@@ -1171,12 +1171,7 @@ void CollisionCheck_DrawCollision(PlayState* play, CollisionCheckContext* colChk
     debugY = 26;
 
     GfxPrint_SetPos(&printer, 3, debugY++);
-    /*
-    //GfxPrint_Printf(&printer, "Room C: %d P: %d", play->roomCtx.curRoom.num, play->roomCtx.prevRoom.num);
-    if(player->doorActor != NULL) {
-        GfxPrint_Printf(&printer, "Door ID: %d | Last opened: %d", player->doorActor->params, player->lastOpenedDoorParams);
-    }
-    */
+    GfxPrint_Printf(&printer, "Room C: %d P: %d", play->roomCtx.curRoom.num, play->roomCtx.prevRoom.num);
 
     GfxPrint_SetPos(&printer, 3, debugY++);
     GfxPrint_Printf(&printer, "Rot: %d %d %d", (s32)player->actor.world.rot.x, (s32)player->actor.world.rot.y, (s32)player->actor.world.rot.z);
