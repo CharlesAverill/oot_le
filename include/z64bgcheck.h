@@ -52,10 +52,26 @@ typedef struct {
 } CollisionPoly; // size = 0x10
 
 typedef struct {
-    /* 0x00 */ u16 cameraSType;
-    /* 0x02 */ s16 numCameras;
-    /* 0x04 */ Vec3s* camPosData;
-} CamData;
+    /* 0x0 */ u16 setting; // camera setting described by CameraSettingType enum
+    /* 0x2 */ s16 count; // only used when `bgCamFuncData` is a list of points used for crawlspaces
+    /* 0x4 */ Vec3s* bgCamFuncData; // s16 data grouped in threes (ex. Vec3s), is usually of type `BgCamFuncData`, but can be a list of points of type `Vec3s` for crawlspaces
+} BgCamInfo; // size = 0x8
+
+typedef BgCamInfo CamData; // Todo: Zapd compatibility
+
+// The structure used for all instances of s16 data from `BgCamInfo` with the exception of crawlspaces.
+// See `Camera_Subj4` for Vec3s data usage in crawlspaces
+typedef struct {
+    /* 0x00 */ Vec3s pos;
+    /* 0x06 */ Vec3s rot;
+    /* 0x0C */ s16 fov;
+    /* 0x0E */ union {
+        s16 jfifId;
+        s16 timer;
+        s16 flags;
+    };
+    /* 0x10 */ s16 unk_10; // unused
+} BgCamFuncData; // size = 0x12
 
 typedef struct {
     /* 0x00 */ s16 xMin;
@@ -68,14 +84,97 @@ typedef struct {
     // 0x0008_0000 = ?
     // 0x0007_E000 = Room Index, 0x3F = all rooms
     // 0x0000_1F00 = Lighting Settings Index
-    // 0x0000_00FF = CamData index
+    // 0x0000_00FF = BgCam Index
 } WaterBox; // size = 0x10
+
+typedef enum {
+    /*  0 */ FLOOR_TYPE_0,
+    /*  1 */ FLOOR_TYPE_1,
+    /*  2 */ FLOOR_TYPE_2,
+    /*  3 */ FLOOR_TYPE_3,
+    /*  4 */ FLOOR_TYPE_4,
+    /*  5 */ FLOOR_TYPE_5,
+    /*  6 */ FLOOR_TYPE_6,
+    /*  7 */ FLOOR_TYPE_7,
+    /*  8 */ FLOOR_TYPE_8,
+    /*  9 */ FLOOR_TYPE_9,
+    /* 10 */ FLOOR_TYPE_10,
+    /* 11 */ FLOOR_TYPE_11,
+    /* 12 */ FLOOR_TYPE_12
+} FloorType;
+
+typedef enum {
+    /*  0 */ WALL_TYPE_0,
+    /*  1 */ WALL_TYPE_1,
+    /*  2 */ WALL_TYPE_2,
+    /*  3 */ WALL_TYPE_3,
+    /*  4 */ WALL_TYPE_4,
+    /*  5 */ WALL_TYPE_5,
+    /*  6 */ WALL_TYPE_6,
+    /*  7 */ WALL_TYPE_7,
+    /*  8 */ WALL_TYPE_8,
+    /*  9 */ WALL_TYPE_9,
+    /* 10 */ WALL_TYPE_10,
+    /* 11 */ WALL_TYPE_11,
+    /* 12 */ WALL_TYPE_12,
+    /* 32 */ WALL_TYPE_MAX = 32
+} WallType;
+
+#define WALL_FLAG_0 (1 << 0)
+#define WALL_FLAG_1 (1 << 1)
+#define WALL_FLAG_2 (1 << 2)
+#define WALL_FLAG_3 (1 << 3)
+#define WALL_FLAG_4 (1 << 4)
+#define WALL_FLAG_5 (1 << 5)
+#define WALL_FLAG_6 (1 << 6)
+
+typedef enum {
+    /*  0 */ FLOOR_PROPERTY_0,
+    /*  5 */ FLOOR_PROPERTY_5 = 5,
+    /*  6 */ FLOOR_PROPERTY_6,
+    /*  7 */ FLOOR_PROPERTY_7,
+    /*  8 */ FLOOR_PROPERTY_8,
+    /*  9 */ FLOOR_PROPERTY_9,
+    /* 11 */ FLOOR_PROPERTY_11 = 11,
+    /* 12 */ FLOOR_PROPERTY_12
+} FloorProperty;
+
+typedef enum {
+    /*  0 */ SURFACE_SFX_TYPE_0,
+    /*  1 */ SURFACE_SFX_TYPE_1,
+    /*  2 */ SURFACE_SFX_TYPE_2,
+    /*  3 */ SURFACE_SFX_TYPE_3,
+    /*  4 */ SURFACE_SFX_TYPE_4,
+    /*  5 */ SURFACE_SFX_TYPE_5,
+    /*  6 */ SURFACE_SFX_TYPE_6,
+    /*  7 */ SURFACE_SFX_TYPE_7,
+    /*  8 */ SURFACE_SFX_TYPE_8,
+    /*  9 */ SURFACE_SFX_TYPE_9,
+    /* 10 */ SURFACE_SFX_TYPE_10,
+    /* 11 */ SURFACE_SFX_TYPE_11,
+    /* 12 */ SURFACE_SFX_TYPE_12,
+    /* 13 */ SURFACE_SFX_TYPE_13,
+    /* 14 */ SURFACE_SFX_TYPE_MAX
+} SurfaceSfxType;
+
+typedef enum {
+    /*  0 */ FLOOR_EFFECT_0,
+    /*  1 */ FLOOR_EFFECT_1,
+    /*  2 */ FLOOR_EFFECT_2
+} FloorEffect;
+
+typedef enum {
+    /*  0 */ CONVEYOR_SPEED_DISABLED,
+    /*  1 */ CONVEYOR_SPEED_SLOW,
+    /*  2 */ CONVEYOR_SPEED_MEDIUM,
+    /*  3 */ CONVEYOR_SPEED_FAST,
+    /*  4 */ CONVEYOR_SPEED_MAX
+} ConveyorSpeed;
+
+#define CONVEYOR_DIRECTION_TO_BINANG(conveyorDirection) ((conveyorDirection) * (0x10000 / 64))
 
 typedef struct {
     u32 data[2];
-
-    // Type 1
-    // 0x0800_0000 = wall damage
 } SurfaceType;
 
 typedef struct {
@@ -86,7 +185,7 @@ typedef struct {
     /* 0x14 */ u16 numPolygons;
     /* 0x18 */ CollisionPoly* polyList;
     /* 0x1C */ SurfaceType* surfaceTypeList;
-    /* 0x20 */ CamData* cameraDataList;
+    /* 0x20 */ BgCamInfo* bgCamList;
     /* 0x24 */ u16 numWaterBoxes;
     /* 0x28 */ WaterBox* waterBoxes;
 } CollisionHeader; // original name: BGDataInfo
@@ -139,10 +238,15 @@ typedef struct {
     /* 0x60 */ f32 maxY;
 } BgActor; // size = 0x64
 
+#define BGACTOR_IN_USE (1 << 0) // The bgActor entry is in use
+#define BGACTOR_1 (1 << 1)
+#define BGACTOR_COLLISION_DISABLED (1 << 2) // The collision of the bgActor is disabled
+#define BGACTOR_CEILING_COLLISION_DISABLED (1 << 3) // The ceilings in the collision of the bgActor are ignored
+
 typedef struct {
     /* 0x0000 */ u8 bitFlag;
     /* 0x0004 */ BgActor bgActors[BG_ACTOR_MAX];
-    /* 0x138C */ u16 bgActorFlags[BG_ACTOR_MAX]; // & 0x0008 = no dyna ceiling
+    /* 0x138C */ u16 bgActorFlags[BG_ACTOR_MAX];
     /* 0x13F0 */ CollisionPoly* polyList;
     /* 0x13F4 */ Vec3s* vtxList;
     /* 0x13F8 */ DynaSSNodeList polyNodes;
