@@ -85,6 +85,27 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 static CollisionCheckInfoInit2 sColChkInfoInit_Follower = { 0, 0, 0, 0, MASS_HEAVY };
 
 typedef enum {
+    ENMD_LIMB_NONE,
+    ENMD_LIMB_ROOT,
+    ENMD_LIMB_WAIST,
+    ENMD_LIMB_LEFT_THIGH,
+    ENMD_LIMB_LEFT_LEG,
+    ENMD_LIMB_LEFT_FOOT,
+    ENMD_LIMB_RIGHT_THIGH,
+    ENMD_LIMB_RIGHT_LEG,
+    ENMD_LIMB_RIGHT_FOOT,
+    ENMD_LIMB_TORSO,
+    ENMD_LIMB_LEFT_UPPER_ARM,
+    ENMD_LIMB_LEFT_FOREARM,
+    ENMD_LIMB_LEFT_HAND,
+    ENMD_LIMB_RIGHT_UPPER_ARM,
+    ENMD_LIMB_RIGHT_FOREARM,
+    ENMD_LIMB_RIGHT_HAND,
+    ENMD_LIMB_HEAD,
+    ENMD_LIMB_MAX
+} EnMdLimbs;
+
+typedef enum {
     /*  0 */ ENMD_ANIM_0,
     /*  1 */ ENMD_ANIM_1,
     /*  2 */ ENMD_ANIM_2,
@@ -102,26 +123,6 @@ typedef enum {
     /* 14 */ ENMD_ANIM_WALKFAST,
     /* 15 */ ENMD_ANIM_STAB
 } EnMdAnimation;
-
-typedef enum {
-    ENMD_LIMB_ROOT = 1,
-    ENMD_LIMB_WAIST,
-    ENMD_LIMB_LEFT_THIGH,
-    ENMD_LIMB_LEFT_LEG,
-    ENMD_LIMB_LEFT_FOOT,
-    ENMD_LIMB_RIGHT_THIGH,
-    ENMD_LIMB_RIGHT_LEG,
-    ENMD_LIMB_RIGHT_FOOT,
-    ENMD_LIMB_TORSO,
-    ENMD_LIMB_LEFT_UPPER_ARM,
-    ENMD_LIMB_LEFT_FOREARM,
-    ENMD_LIMB_LEFT_HAND,
-    ENMD_LIMB_RIGHT_UPPER_ARM,
-    ENMD_LIMB_RIGHT_FOREARM,
-    ENMD_LIMB_RIGHT_HAND,
-    ENMD_LIMB_HEAD,
-    ENMD_LIMB_SWORD
-} EnMdLimbs;
 
 static AnimationInfo sAnimationInfo[] = {
     { &gMidoHandsOnHipsIdleAnim, 0.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
@@ -748,7 +749,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
     s32 pad;
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
-    SkelAnime_InitFlex(play, &this->skelAnime, &gMidoSkel, NULL, this->jointTable, this->morphTable, 17);
+    SkelAnime_InitFlex(play, &this->skelAnime, &gMidoSkel, NULL, this->jointTable, this->morphTable, ENMD_LIMB_MAX);
 
     // NPC cylinder
     Collider_InitCylinder(play, &this->collider);
@@ -792,7 +793,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
     Actor_SpawnAsChild(&play->actorCtx, &this->actor, play, ACTOR_EN_ELF, this->actor.world.pos.x,
                        this->actor.world.pos.y, this->actor.world.pos.z, 0, 0, 0, FAIRY_KOKIRI);
 
-    if (EnMd_GetText(play, this) == 0x1045) {
+    if (EnMd_GetText(play, thisx) == 0x1045) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_SHIELD, 829, 119, -348, 0, 0, 0, 5);
     }
 
@@ -927,7 +928,7 @@ void EnMd_Destroy(Actor* thisx, PlayState* play) {
 
 void func_80AAB874(EnMd* this, PlayState* play) {
     if (this->skelAnime.animation == &gMidoHandsOnHipsIdleAnim) {
-        func_80034F54(play, this->unk_214, this->unk_236, 17);
+        func_80034F54(play, this->unk_214, this->unk_236, ENMD_LIMB_MAX);
     } else if ((this->unk_1E0.unk_00 == 0) && (this->unk_20B != 7)) {
         func_80AAA92C(this, 7);
     }
@@ -937,7 +938,7 @@ void func_80AAB874(EnMd* this, PlayState* play) {
 
 void func_80AAB8F8(EnMd* this, PlayState* play) {
     if (this->skelAnime.animation == &gMidoHandsOnHipsIdleAnim) {
-        func_80034F54(play, this->unk_214, this->unk_236, 17);
+        func_80034F54(play, this->unk_214, this->unk_236, ENMD_LIMB_MAX);
     }
     func_80AAA93C(this);
 }
@@ -1089,7 +1090,7 @@ void func_80AAB948(EnMd* this, PlayState* play) {
     }
 
     if (this->skelAnime.animation == &gMidoHandsOnHipsIdleAnim) {
-        func_80034F54(play, this->unk_214, this->unk_236, 17);
+        func_80034F54(play, this->unk_214, this->unk_236, ENMD_LIMB_MAX);
     }
 
     if ((this->unk_1E0.unk_00 == 0) && (play->sceneNum == SCENE_SPOT10)) {
@@ -1127,7 +1128,7 @@ void func_80AABC10(EnMd* this, PlayState* play) {
 }
 
 void func_80AABD0C(EnMd* this, PlayState* play) {
-    func_80034F54(play, this->unk_214, this->unk_236, 17);
+    func_80034F54(play, this->unk_214, this->unk_236, ENMD_LIMB_MAX);
     func_80AAA93C(this);
 
     if (!(EnMd_FollowPath(this, play)) || (this->waypoint != 0)) {

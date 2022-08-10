@@ -3107,6 +3107,12 @@ beginseg
 endseg
 
 beginseg
+    name "ovl_En_Zl5"
+    include "build/src/overlays/actors/ovl_En_Zl5/z_en_zl5.o"
+    include "build/src/overlays/actors/ovl_En_Zl5/ovl_En_Zl5_reloc.o"
+endseg
+
+beginseg
     name "ovl_Obj_KokiriSword"
     include "build/src/overlays/actors/ovl_Obj_KokiriSword/z_obj_kokirisword.o"
     include "build/src/overlays/actors/ovl_Obj_KokiriSword/ovl_Obj_KokiriSword_reloc.o"
@@ -3116,6 +3122,18 @@ beginseg
     name "ovl_Obj_BeanPlatform"
     include "build/src/overlays/actors/ovl_Obj_BeanPlatform/z_obj_beanplatform.o"
     include "build/src/overlays/actors/ovl_Obj_BeanPlatform/ovl_Obj_BeanPlatform_reloc.o"
+endseg
+
+beginseg
+    name "ovl_En_Lynel"
+    include "build/src/overlays/actors/ovl_En_Lynel/z_en_lynel.o"
+    include "build/src/overlays/actors/ovl_En_Lynel/ovl_En_Lynel_reloc.o"
+endseg
+
+beginseg
+    name "ovl_En_Greeble"
+    include "build/src/overlays/actors/ovl_En_Greeble/z_en_greeble.o"
+    include "build/src/overlays/actors/ovl_En_Greeble/ovl_En_Greeble_reloc.o"
 endseg
 
 beginseg
@@ -6064,6 +6082,20 @@ beginseg
     name "object_tido"
     romalign 0x1000
     include "build/assets/objects/object_tido/object_tido.o"
+    number 6
+endseg
+
+beginseg
+    name "object_lynel"
+    romalign 0x1000
+    include "build/assets/objects/object_lynel/object_lynel.o"
+    number 6
+endseg
+
+beginseg
+    name "object_greeble"
+    romalign 0x1000
+    include "build/assets/objects/object_greeble/object_greeble.o"
     number 6
 endseg
 

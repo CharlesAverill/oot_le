@@ -126,7 +126,9 @@ typedef enum {
     /* 30 */ ZL4_ANIM_30,
     /* 31 */ ZL4_ANIM_31,
     /* 32 */ ZL4_ANIM_32,
-    /* 33 */ ZL4_ANIM_33
+    /* 33 */ ZL4_ANIM_33,
+    /* 34 */ ZL4_ANIM_STAND,
+    /* 35 */ ZL5_ANIM_WALK
 } EnZl4Animation;
 
 static AnimationInfo sAnimationInfo[] = {

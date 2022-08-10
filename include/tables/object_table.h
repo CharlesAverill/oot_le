@@ -410,3 +410,5 @@
 /* 0x0190 */ DEFINE_OBJECT(object_timeblock, OBJECT_TIMEBLOCK)
 /* 0x0191 */ DEFINE_OBJECT(object_zl4, OBJECT_ZL4)
 /* 0x0192 */ DEFINE_OBJECT(object_tido, OBJECT_TIDO)
+/* 0x0193 */ DEFINE_OBJECT(object_lynel, OBJECT_LYNEL)
+/* 0x0194 */ DEFINE_OBJECT(object_greeble, OBJECT_GREEBLE)
