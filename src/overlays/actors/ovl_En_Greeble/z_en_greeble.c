@@ -28,9 +28,7 @@ typedef enum {
     ENGREEBLEWORM_LIMB_MAX
 } EnGreebleWormLimbs;
 
-typedef enum {
-    ENGREEBLEWORM_ROTATE_ANIM
-} EnGreebleAnimation;
+typedef enum { ENGREEBLEWORM_ROTATE_ANIM } EnGreebleAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
     { &gGreebleWormSkelRotateAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
@@ -39,12 +37,13 @@ static AnimationInfo sAnimationInfo[] = {
 void EnGreeble_Init(Actor* thisx, PlayState* play) {
     EnGreeble* this = (EnGreeble*)thisx;
 
-    SkelAnime_Init(play, &this->skelAnime, &gGreebleWormSkel, NULL, this->jointTable, this->morphTable, ENGREEBLEWORM_LIMB_MAX);
+    SkelAnime_Init(play, &this->skelAnime, &gGreebleWormSkel, NULL, this->jointTable, this->morphTable,
+                   ENGREEBLEWORM_LIMB_MAX);
     Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENGREEBLEWORM_ROTATE_ANIM);
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
 
-    //Actor_SetScale(&this->actor, 0.01f);
+    // Actor_SetScale(&this->actor, 0.01f);
 
     this->alpha = 255;
 
@@ -53,7 +52,6 @@ void EnGreeble_Init(Actor* thisx, PlayState* play) {
 
 void EnGreeble_Destroy(Actor* thisx, PlayState* play) {
     EnGreeble* this = (EnGreeble*)thisx;
-
 }
 
 void EnGreeble_Update(Actor* thisx, PlayState* play) {
@@ -63,7 +61,7 @@ void EnGreeble_Update(Actor* thisx, PlayState* play) {
 }
 
 s32 EnGreeble_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx,
-                              Gfx** gfx) {
+                               Gfx** gfx) {
     return false;
 }
 

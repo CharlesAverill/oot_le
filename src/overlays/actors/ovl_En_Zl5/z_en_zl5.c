@@ -1,14 +1,14 @@
 #include "z_en_zl5.h"
 #include "assets/objects/object_zl4/object_zl4.h"
 
-#define FLAGS (ACTOR_FLAG_4 | ACTOR_FLAG_5)
+#define FLAGS (ACTOR_FLAG_0 | ACTOR_FLAG_3 | ACTOR_FLAG_4)
 
 void EnZl5_Init(Actor* thisx, PlayState* play);
 void EnZl5_Destroy(Actor* thisx, PlayState* play);
 void EnZl5_Update(Actor* thisx, PlayState* play);
 void EnZl5_Draw(Actor* thisx, PlayState* play);
 
-const ActorInit En_EnZl5_InitVars = {
+const ActorInit En_Zl5_InitVars = {
     ACTOR_EN_ZL5,
     ACTORCAT_NPC,
     FLAGS,
@@ -64,35 +64,30 @@ static ColliderCylinderInit sCylinderInit = {
         BUMP_NONE,
         OCELEM_ON,
     },
-    { 10, 44, 0, { 0, 0, 0 } },
+    { 20, 44, 0, { 0, 0, 0 } },
 };
 
 static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 
-static AnimationInfo sAnimationInfo[] = {
-    { &gChildZeldaCivSkelStandAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
-    { &gChildZeldaCivSkelWalkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f }
-}
+static AnimationInfo sAnimationInfo[] = { { &gChildZeldaCivSkelStandAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
+                                          { &gChildZeldaCivSkelWalkAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f } };
 
-typedef enum {
-    ZL5_ANIM_IDLE,
-    ZL5_ANIM_WALK
-} EnZl5Animation;
+typedef enum { ZL5_ANIM_IDLE, ZL5_ANIM_WALK } EnZl5Animation;
 
-s16 func_80B5B9B0(PlayState* play, Actor* thisx) {
+s16 func_80B5B9B0_zl5(PlayState* play, Actor* thisx) {
     if (Message_GetState(&play->msgCtx) == TEXT_STATE_CLOSING) {
         return false;
     }
     return true;
 }
 
-void EnZl5_GetText(EnZl5* this, PlayState* play) {
-    return
+u16 EnZl5_GetText(EnZl5* this, PlayState* play) {
+    return 0x71C1;
 }
 
 void EnZl5_Idle(EnZl5* this, PlayState* play) {
     func_800343CC(play, &this->actor, &this->unk_1E0.unk_00, this->collider.dim.radius + 60.0f, EnZl5_GetText,
-                  func_80B5B9B0);
+                  func_80B5B9B0_zl5);
 }
 
 void EnZl5_Init(Actor* thisx, PlayState* play) {
@@ -101,25 +96,22 @@ void EnZl5_Init(Actor* thisx, PlayState* play) {
     SkelAnime_InitFlex(play, &this->skelAnime, &gChildZeldaCivSkel, NULL, this->jointTable, this->morphTable, 18);
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
     Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ZL5_ANIM_IDLE);
+
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
     CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
     Actor_SetScale(&this->actor, 0.01f);
+
     this->actor.targetMode = 6;
+    this->actor.textId = 0x71C1;
+
     this->actionFunc = EnZl5_Idle;
+
     this->eyeExpression = this->mouthExpression = ZL5_MOUTH_NEUTRAL;
 }
 
 void EnZl5_Destroy(Actor* thisx, PlayState* play) {
     EnZl5* this = (EnZl5*)thisx;
-}
-
-void EnZl5_Update(Actor* thisx, PlayState* play) {
-    EnZl5* this = (EnZl5*)thisx;
-
-    SkelAnime_Update(&this->skelAnime);
-
-    EnZl5_UpdateFace(this);
 }
 
 void EnZl5_UpdateFace(EnZl5* this) {
@@ -184,6 +176,20 @@ void EnZl5_UpdateFace(EnZl5* this) {
             this->mouthState = 0;
             break;
     }
+}
+
+void EnZl5_Update(Actor* thisx, PlayState* play) {
+    EnZl5* this = (EnZl5*)thisx;
+
+    SkelAnime_Update(&this->skelAnime);
+    EnZl5_UpdateFace(this);
+
+    Actor_UpdateBgCheckInfo(play, &this->actor, 0.0f, 0.0f, 0.0f, UPDBGCHECKINFO_FLAG_2);
+
+    this->actionFunc(this, play);
+
+    Collider_UpdateCylinder(&this->actor, &this->collider);
+    CollisionCheck_SetOC(play, &play->colChkCtx, &this->collider.base);
 }
 
 s32 EnZl5_OverrideLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3f* pos, Vec3s* rot, void* thisx) {

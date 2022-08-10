@@ -2434,7 +2434,6 @@ void Math3D_DrawCylinderImpl(GraphicsContext* gfxCtx, Gfx** gfxP, f32 x, f32 y, 
     Matrix_Pop();
 }
 
-
 void Math3D_DrawSphere(PlayState* play, Sphere16* sph, u8 r, u8 g, u8 b, u8 a) {
     OPEN_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
 

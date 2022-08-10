@@ -20,9 +20,7 @@ const ActorInit En_Lynel_InitVars = {
     (ActorFunc)EnLynel_Draw,
 };
 
-typedef enum {
-    ENLYNEL_IDLE_ANIM
-} EnLynelAnimation;
+typedef enum { ENLYNEL_IDLE_ANIM } EnLynelAnimation;
 
 static AnimationInfo sAnimationInfo[] = {
     { &gLynelTailSkelTailidleAnim, 1.0f, 0.0f, -1.0f, ANIMMODE_LOOP, 0.0f },
@@ -36,7 +34,7 @@ void EnLynel_Init(Actor* thisx, PlayState* play) {
 
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 18.0f);
 
-    //Actor_SetScale(&this->actor, 0.01f);
+    // Actor_SetScale(&this->actor, 0.01f);
 
     this->alpha = 255;
 }
@@ -65,10 +63,10 @@ void EnLynel_Draw(Actor* thisx, PlayState* play) {
     OPEN_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
 
     Gfx_SetupDL_37Opa(play->state.gfxCtx);
-    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable,
-                          this->skelAnime.dListCount, NULL, NULL, this);
+    SkelAnime_DrawFlexOpa(play, this->skelAnime.skeleton, this->skelAnime.jointTable, this->skelAnime.dListCount, NULL,
+                          NULL, this);
 
-    //func_80034BA0(play, &this->skelAnime, EnLynel_OverrideLimbDraw, EnLynel_PostLimbDraw, &this->actor, this->alpha);
+    // func_80034BA0(play, &this->skelAnime, EnLynel_OverrideLimbDraw, EnLynel_PostLimbDraw, &this->actor, this->alpha);
 
     /*
     Gfx_SetupDL_25Opa(play->state.gfxCtx);

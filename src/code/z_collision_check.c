@@ -1136,7 +1136,7 @@ void CollisionCheck_DrawCollision(PlayState* play, CollisionCheckContext* colChk
 
     int debugY;
 
-    if(!HREG(76)) {
+    if (!HREG(76)) {
         return;
     }
 
@@ -1174,10 +1174,12 @@ void CollisionCheck_DrawCollision(PlayState* play, CollisionCheckContext* colChk
     GfxPrint_Printf(&printer, "Room C: %d P: %d", play->roomCtx.curRoom.num, play->roomCtx.prevRoom.num);
 
     GfxPrint_SetPos(&printer, 3, debugY++);
-    GfxPrint_Printf(&printer, "Rot: %d %d %d", (s32)player->actor.world.rot.x, (s32)player->actor.world.rot.y, (s32)player->actor.world.rot.z);
+    GfxPrint_Printf(&printer, "Rot: %d %d %d", (s32)player->actor.world.rot.x, (s32)player->actor.world.rot.y,
+                    (s32)player->actor.world.rot.z);
 
     GfxPrint_SetPos(&printer, 3, debugY++);
-    GfxPrint_Printf(&printer, "Pos: %d %d %d", (s32)player->actor.world.pos.x, (s32)player->actor.world.pos.y, (s32)player->actor.world.pos.z);
+    GfxPrint_Printf(&printer, "Pos: %d %d %d", (s32)player->actor.world.pos.x, (s32)player->actor.world.pos.y,
+                    (s32)player->actor.world.pos.z);
 
     gfx = GfxPrint_Close(&printer);
     GfxPrint_Destroy(&printer);

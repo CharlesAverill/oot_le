@@ -85,27 +85,6 @@ static CollisionCheckInfoInit2 sColChkInfoInit = { 0, 0, 0, 0, MASS_IMMOVABLE };
 static CollisionCheckInfoInit2 sColChkInfoInit_Follower = { 0, 0, 0, 0, MASS_HEAVY };
 
 typedef enum {
-    ENMD_LIMB_NONE,
-    ENMD_LIMB_ROOT,
-    ENMD_LIMB_WAIST,
-    ENMD_LIMB_LEFT_THIGH,
-    ENMD_LIMB_LEFT_LEG,
-    ENMD_LIMB_LEFT_FOOT,
-    ENMD_LIMB_RIGHT_THIGH,
-    ENMD_LIMB_RIGHT_LEG,
-    ENMD_LIMB_RIGHT_FOOT,
-    ENMD_LIMB_TORSO,
-    ENMD_LIMB_LEFT_UPPER_ARM,
-    ENMD_LIMB_LEFT_FOREARM,
-    ENMD_LIMB_LEFT_HAND,
-    ENMD_LIMB_RIGHT_UPPER_ARM,
-    ENMD_LIMB_RIGHT_FOREARM,
-    ENMD_LIMB_RIGHT_HAND,
-    ENMD_LIMB_HEAD,
-    ENMD_LIMB_MAX
-} EnMdLimbs;
-
-typedef enum {
     /*  0 */ ENMD_ANIM_0,
     /*  1 */ ENMD_ANIM_1,
     /*  2 */ ENMD_ANIM_2,
@@ -512,13 +491,13 @@ u16 EnMd_GetText(PlayState* play, Actor* thisx) {
     EnMd* this = (EnMd*)thisx;
 
     if (EnMd_IsFollower(this)) {
-        if(AMMO(ITEM_SLINGSHOT) <= 0) {
+        if (AMMO(ITEM_SLINGSHOT) <= 0) {
             return 0x71BF;
         }
         return 0x71B5;
     }
 
-    switch (play->sceneNum) {
+    switch (play->sceneId) {
         case SCENE_SPOT04:
             return EnMd_GetTextKokiriForest(play, this);
         case SCENE_KOKIRI_HOME4:
@@ -566,10 +545,10 @@ s16 func_80AAAF04(PlayState* play, Actor* thisx) {
             }
             return 0;
         case TEXT_STATE_EVENT:
-            if(!this->spawnedKokiriSword) {
+            if (!this->spawnedKokiriSword) {
                 this->spawnedKokiriSword = true;
-                Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_SHIELD, this->actor.home.pos.x,
-                                   this->actor.home.pos.y, this->actor.home.pos.z, 0, 0, 0, 6);
+                Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_SHIELD, this->actor.home.pos.x, this->actor.home.pos.y,
+                            this->actor.home.pos.z, 0, 0, 0, 6);
             }
             if (Message_ShouldAdvance(play)) {
                 return 2;
@@ -581,13 +560,13 @@ s16 func_80AAAF04(PlayState* play, Actor* thisx) {
 }
 
 u8 EnMd_ShouldSpawn(EnMd* this, PlayState* play) {
-    if (play->sceneNum == SCENE_SPOT04) {
+    if (play->sceneId == SCENE_SPOT04) {
         if (!GET_EVENTCHKINF(EVENTCHKINF_1C) && !GET_EVENTCHKINF(EVENTCHKINF_40)) {
             return 1;
         }
     }
 
-    if (play->sceneNum == SCENE_KOKIRI_HOME4) {
+    if (play->sceneId == SCENE_KOKIRI_HOME4) {
         if (GET_EVENTCHKINF(EVENTCHKINF_1C) || GET_EVENTCHKINF(EVENTCHKINF_40)) {
             if (!LINK_IS_ADULT) {
                 return 1;
@@ -595,11 +574,11 @@ u8 EnMd_ShouldSpawn(EnMd* this, PlayState* play) {
         }
     }
 
-    if (play->sceneNum == SCENE_SPOT10 || play->sceneNum == SCENE_LEARNING01 || play->sceneNum == SCENE_YDAN_BOSS ) {
+    if (play->sceneId == SCENE_SPOT10 || play->sceneId == SCENE_LEARNING01 || play->sceneId == SCENE_YDAN_BOSS) {
         return 1;
     }
 
-    if (play->sceneNum == SCENE_YDAN &&
+    if (play->sceneId == SCENE_YDAN &&
         (play->roomCtx.curRoom.num == 0 || GET_PLAYER(play)->hasFollowingMido || this->actor.params == 1)) {
         return 1;
     }
@@ -730,9 +709,9 @@ u8 EnMd_SetMovedPos(EnMd* this, PlayState* play) {
 void func_80AAB5A4(EnMd* this, PlayState* play) {
     f32 temp;
 
-    if (play->sceneNum != SCENE_KOKIRI_HOME4) {
+    if (play->sceneId != SCENE_KOKIRI_HOME4) {
         temp = (CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD) && !GET_EVENTCHKINF(EVENTCHKINF_1C) &&
-                (play->sceneNum == SCENE_SPOT04))
+                (play->sceneId == SCENE_SPOT04))
                    ? 100.0f
                    : 400.0f;
         this->alpha = func_80034DD4(&this->actor, play, this->alpha, temp);
@@ -757,7 +736,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
 
     this->actor.targetMode = 6;
 
-    if(EnMd_IsFollower(this)) {
+    if (EnMd_IsFollower(this)) {
         this->actor.targetMode = 10;
         this->actor.flags &= ~ACTOR_FLAG_0;
         this->collider.dim.radius /= 2;
@@ -775,7 +754,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
         return;
     }
 
-    if(GET_PLAYER(play)->hasFollowingMido) {
+    if (GET_PLAYER(play)->hasFollowingMido) {
         this->actor.params = 2;
     }
 
@@ -783,7 +762,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
     this->teleportTimer = -1;
     this->stabTimer = 0;
 
-    if(this->isFollowing) {
+    if (this->isFollowing) {
         GET_PLAYER(play)->hasFollowingMido = true;
     }
 
@@ -797,17 +776,17 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
         Actor_Spawn(&play->actorCtx, play, ACTOR_ITEM_SHIELD, 829, 119, -348, 0, 0, 0, 5);
     }
 
-    if (play->sceneNum == SCENE_YDAN) {
+    if (play->sceneId == SCENE_YDAN) {
         /*
         // Spawn directly in front of Link
         Actor_SetPosRotY(thisx, player->actor.world.pos.x + Math_SinS(player->actor.shape.rot.y) * 200.0f,
                                 player->actor.world.pos.y,
                                 player->actor.world.pos.z + Math_CosS(player->actor.shape.rot.y) * 200.0f, 0);
         */
-        switch(play->roomCtx.curRoom.num) {
+        switch (play->roomCtx.curRoom.num) {
             case 0: // Main room
-                if(this->isFollowing) {
-                    switch(play->roomCtx.prevRoom.num) {
+                if (this->isFollowing) {
+                    switch (play->roomCtx.prevRoom.num) {
                         case 1: // Middle room
                             Actor_SetPosRotY(thisx, -301, 400, 352, -10022);
                             break;
@@ -821,7 +800,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
                 }
                 break;
             case 1: // Between main and compass
-                switch(play->roomCtx.prevRoom.num) {
+                switch (play->roomCtx.prevRoom.num) {
                     case 0: // Main room
                         Actor_SetPosRotY(thisx, -613, 400, 458, 15637);
                         break;
@@ -831,7 +810,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
                 }
                 break;
             case 3: // Below room
-                switch(play->roomCtx.prevRoom.num) {
+                switch (play->roomCtx.prevRoom.num) {
                     case 0: // Main room
                         Actor_SetPosRotY(thisx, 29, -880, 119, -3257);
                         break;
@@ -847,18 +826,18 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
                 }
                 break;
             case 4: // Corner room with minigoma and deku scrub
-                switch(play->roomCtx.prevRoom.num) {
+                switch (play->roomCtx.prevRoom.num) {
                     case 3: // Below room
                         Actor_SetPosRotY(thisx, -35, -880, 751, -29421);
                         break;
                     case 5: // Spike roller room
                         Actor_SetPosRotY(thisx, -179, -880, 917, -14158);
                         break;
-                    // next case
+                        // next case
                 }
                 break;
             case 5: // Spike roller room
-                switch(play->roomCtx.prevRoom.num) {
+                switch (play->roomCtx.prevRoom.num) {
                     case 4: // Corner room with minigoma and deku scrub
                         Actor_SetPosRotY(thisx, -477, -880, 1020, 20736);
                         break;
@@ -868,7 +847,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
                 }
                 break;
             case 6: // Minigoma, deku scrub, keese
-                switch(play->roomCtx.prevRoom.num) {
+                switch (play->roomCtx.prevRoom.num) {
                     case 5:
                         Actor_SetPosRotY(thisx, -1668, -760, 1135, 20629);
                         break;
@@ -878,7 +857,7 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
                 }
                 break;
             case 7: // Grave room
-                switch(play->roomCtx.prevRoom.num) {
+                switch (play->roomCtx.prevRoom.num) {
                     case 3: // Below room
                         Actor_SetPosRotY(thisx, -1328, -820, -50, 10139);
                         break;
@@ -891,29 +870,29 @@ void EnMd_Init(Actor* thisx, PlayState* play) {
                 }
                 break;
             case 9: // Pre-gohma room
-                switch(play->roomCtx.prevRoom.num) {
+                switch (play->roomCtx.prevRoom.num) {
                     case 3: // Below room
                         Actor_SetPosRotY(thisx, -755, -1880, -454, 1266);
                         break;
                 }
-            case 2: // Compass room
-            case 8: // Skulltula room with big dekubaba and minigoma
+            case 2:  // Compass room
+            case 8:  // Skulltula room with big dekubaba and minigoma
             case 10: // Switch platforms room
             default:
                 break;
         }
     }
 
-    if (((play->sceneNum == SCENE_SPOT04) && !GET_EVENTCHKINF(EVENTCHKINF_04)) ||
-            ((play->sceneNum == SCENE_SPOT04) && GET_EVENTCHKINF(EVENTCHKINF_04) &&
-            CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD)) ||
-            ((play->sceneNum == SCENE_SPOT10) && !GET_EVENTCHKINF(EVENTCHKINF_0A)) || EnMd_IsFollower(this)) {
+    if (((play->sceneId == SCENE_SPOT04) && !GET_EVENTCHKINF(EVENTCHKINF_04)) ||
+        ((play->sceneId == SCENE_SPOT04) && GET_EVENTCHKINF(EVENTCHKINF_04) &&
+         CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD)) ||
+        ((play->sceneId == SCENE_SPOT10) && !GET_EVENTCHKINF(EVENTCHKINF_0A)) || EnMd_IsFollower(this)) {
         this->actor.home.pos = this->actor.world.pos;
         this->actionFunc = func_80AAB948;
         return;
     }
 
-    if (play->sceneNum != SCENE_KOKIRI_HOME4) {
+    if (play->sceneId != SCENE_KOKIRI_HOME4) {
         EnMd_SetMovedPos(this, play);
     }
 
@@ -999,16 +978,17 @@ void func_80AAB948(EnMd* this, PlayState* play) {
                 this->teleportTimer = TELEPORT_WAIT;
             } else if (this->teleportTimer == 1) {
                 Actor_SetPosRotY(&this->actor, player->actor.world.pos.x - Math_SinS(player->actor.shape.rot.y) * 60.0f,
-                                              player->actor.world.pos.y,
-                                              player->actor.world.pos.z - Math_CosS(player->actor.shape.rot.y) * 60.0f, 0);
-                //this->actor.world.pos = player->actor.world.pos;
+                                 player->actor.world.pos.y,
+                                 player->actor.world.pos.z - Math_CosS(player->actor.shape.rot.y) * 60.0f, 0);
+                // this->actor.world.pos = player->actor.world.pos;
                 this->teleportTimer = -1;
             } else {
                 this->teleportTimer--;
             }
         }
 
-        if (Math_Vec3f_DistXZ(&this->actor.world.pos, &this->targetActor->focus.pos) > 1000 && this->targetActor == &player->actor) {
+        if (Math_Vec3f_DistXZ(&this->actor.world.pos, &this->targetActor->focus.pos) > 1000 &&
+            this->targetActor == &player->actor) {
             Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
 
             this->actor.world.pos.x = (player->actor.world.pos.x + this->actor.world.pos.x) / 2;
@@ -1033,12 +1013,14 @@ void func_80AAB948(EnMd* this, PlayState* play) {
                 if (this->targetActor == &(player->actor) && this->skelAnime.animation != &gMidoHandsOnHipsIdleAnim) {
                     Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
                     // If not moving and targeting another actor, stab
-                } else if (this->targetActor != &(player->actor) && (this->skelAnime.animation != &gMidoSkelStabAnim ||
-                    (this->skelAnime.animation == &gMidoSkelStabAnim && this->skelAnime.curFrame == this->skelAnime.endFrame))) {
-                    if(this->stabTimer == -1) {
+                } else if (this->targetActor != &(player->actor) &&
+                           (this->skelAnime.animation != &gMidoSkelStabAnim ||
+                            (this->skelAnime.animation == &gMidoSkelStabAnim &&
+                             this->skelAnime.curFrame == this->skelAnime.endFrame))) {
+                    if (this->stabTimer == -1) {
                         Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_10);
                         this->stabTimer = STAB_WAIT;
-                    } else if(this->stabTimer == 0) {
+                    } else if (this->stabTimer == 0) {
                         Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENMD_ANIM_STAB);
                         this->stabTimer = -1;
                     } else {
@@ -1068,14 +1050,14 @@ void func_80AAB948(EnMd* this, PlayState* play) {
 
         if (this->unk_1E0.unk_00 == 2) {
             if (CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD) && !GET_EVENTCHKINF(EVENTCHKINF_1C) &&
-                (play->sceneNum == SCENE_SPOT04)) {
+                (play->sceneId == SCENE_SPOT04)) {
                 play->msgCtx.msgMode = MSGMODE_PAUSED;
             }
 
-            if (play->sceneNum == SCENE_SPOT04) {
+            if (play->sceneId == SCENE_SPOT04) {
                 SET_EVENTCHKINF(EVENTCHKINF_04);
             }
-            if (play->sceneNum == SCENE_SPOT10) {
+            if (play->sceneId == SCENE_SPOT10) {
                 SET_EVENTCHKINF(EVENTCHKINF_0A);
             }
 
@@ -1093,7 +1075,7 @@ void func_80AAB948(EnMd* this, PlayState* play) {
         func_80034F54(play, this->unk_214, this->unk_236, ENMD_LIMB_MAX);
     }
 
-    if ((this->unk_1E0.unk_00 == 0) && (play->sceneNum == SCENE_SPOT10)) {
+    if ((this->unk_1E0.unk_00 == 0) && (play->sceneId == SCENE_SPOT10)) {
         if (player->stateFlags2 & PLAYER_STATE2_24) {
             player->stateFlags2 |= PLAYER_STATE2_25;
             player->unk_6A8 = &this->actor;
@@ -1115,8 +1097,8 @@ void func_80AABC10(EnMd* this, PlayState* play) {
         this->actionFunc = func_80AAB948;
         play->msgCtx.ocarinaMode = OCARINA_MODE_04;
     } else if (play->msgCtx.ocarinaMode == OCARINA_MODE_03) {
-        Audio_PlaySoundGeneral(NA_SE_SY_CORRECT_CHIME, &gSfxDefaultPos, 4, &gSfxDefaultFreqAndVolScale,
-                               &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
+        Audio_PlaySfxGeneral(NA_SE_SY_CORRECT_CHIME, &gSfxDefaultPos, 4, &gSfxDefaultFreqAndVolScale,
+                             &gSfxDefaultFreqAndVolScale, &gSfxDefaultReverb);
         this->actor.textId = 0x1067;
         func_8002F2CC(&this->actor, play, this->collider.dim.radius + 30.0f);
 
@@ -1136,8 +1118,7 @@ void func_80AABD0C(EnMd* this, PlayState* play) {
         return;
     }
 
-    if (CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD) && !GET_EVENTCHKINF(EVENTCHKINF_1C) &&
-        (play->sceneNum == SCENE_SPOT04)) {
+    if (CHECK_QUEST_ITEM(QUEST_KOKIRI_EMERALD) && !GET_EVENTCHKINF(EVENTCHKINF_1C) && (play->sceneId == SCENE_SPOT04)) {
         Message_CloseTextbox(play);
         SET_EVENTCHKINF(EVENTCHKINF_1C);
         Actor_Kill(&this->actor);
@@ -1206,7 +1187,7 @@ void EnMd_PostLimbDraw(PlayState* play, s32 limbIndex, Gfx** dList, Vec3s* rot, 
     Vec3f vec = { 400.0f, 0.0f, 0.0f };
 
     if (this->skelAnime.animation == &gMidoSkelStabAnim && 3 <= this->skelAnime.curFrame &&
-               this->skelAnime.curFrame <= 7) {
+        this->skelAnime.curFrame <= 7) {
         EnMd_SetupHurtbox(this, play);
     }
 

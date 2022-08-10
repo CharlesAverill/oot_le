@@ -539,6 +539,7 @@ s32 func_8009728C(PlayState* play, RoomContext* roomCtx, s32 roomNum) {
         roomCtx->curRoom.segment = NULL;
         roomCtx->status = 1;
 
+        osSyncPrintf("-------ROOMNUM: %d, play->numRooms: %d-------", roomNum, play->numRooms);
         ASSERT(roomNum < play->numRooms, "read_room_ID < game_play->room_rom_address.num", "../z_room.c", 1009);
 
         size = play->roomList[roomNum].vromEnd - play->roomList[roomNum].vromStart;

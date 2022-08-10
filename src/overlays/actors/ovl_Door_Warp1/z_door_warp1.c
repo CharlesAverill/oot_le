@@ -510,10 +510,10 @@ void DoorWarp1_ChildWarpOut(DoorWarp1* this, PlayState* play) {
                 Item_Give(play, ITEM_KOKIRI_EMERALD);
 
                 // Give deku shield
-                //func_8002F434(&this->actor, play, GI_SHIELD_DEKU, this->actor.xzDistToPlayer * 2.0f, fabsf(this->actor.yDistToPlayer) * 2.0f);
-                //player->getItemId = GI_SHIELD_DEKU;
-                //player->interactRangeActor = &this->actor;
-                //player->getItemDirection = 0;
+                // func_8002F434(&this->actor, play, GI_SHIELD_DEKU, this->actor.xzDistToPlayer * 2.0f,
+                // fabsf(this->actor.yDistToPlayer) * 2.0f); player->getItemId = GI_SHIELD_DEKU;
+                // player->interactRangeActor = &this->actor;
+                // player->getItemDirection = 0;
 
                 play->nextEntranceIndex = ENTR_SPOT04_0;
                 gSaveContext.nextCutsceneIndex = 0xFFF1;

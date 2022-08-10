@@ -70,11 +70,11 @@ void ObjBeanPlatform_Init(Actor* thisx, PlayState* play) {
     this->type = this->dyna.actor.params & 0xF;
     this->movementSpeed = this->velocity = (this->dyna.actor.params >> 4) & 0xF;
 
-    if((this->dyna.actor.params >> 8) & 0x1) {
+    if ((this->dyna.actor.params >> 8) & 0x1) {
         this->velocity *= -1;
     }
 
-    if((this->dyna.actor.params >> 8) & 0x1 == 1) {
+    if ((this->dyna.actor.params >> 8) & 0x1 == 1) {
         this->movementSpeed *= -1;
     }
 
@@ -91,7 +91,7 @@ void ObjBeanPlatform_Destroy(Actor* thisx, PlayState* play) {
 void ObjBeanPlatform_Update(Actor* thisx, PlayState* play) {
     ObjBeanPlatform* this = (ObjBeanPlatform*)thisx;
 
-    switch(this->type) {
+    switch (this->type) {
         case BEANPLATFORM_YMOVE:
             this->dyna.actor.world.pos.y += this->velocity;
             break;
@@ -114,35 +114,47 @@ void ObjBeanPlatform_Update(Actor* thisx, PlayState* play) {
             this->dyna.actor.world.pos.z += this->velocity;
             break;
         case BEANPLATFORM_CWCIRCLE_XZ:
-            this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
-            this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z - Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x +
+                                           Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z -
+                                           Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
             break;
         case BEANPLATFORM_CCWCIRCLE_XZ:
-            this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
-            this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x +
+                                           Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z +
+                                           Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
             break;
         case BEANPLATFORM_CWCIRCLE_XY:
-            this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
-            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y - Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x +
+                                           Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y -
+                                           Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
             break;
         case BEANPLATFORM_CCWCIRCLE_XY:
-            this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x + Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
-            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.x = this->dyna.actor.home.pos.x +
+                                           Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y +
+                                           Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
             break;
         case BEANPLATFORM_CWCIRCLE_YZ:
-            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
-            this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z - Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y +
+                                           Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z -
+                                           Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
             break;
         case BEANPLATFORM_CCWCIRCLE_YZ:
-            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y + Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
-            this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z + Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.y = this->dyna.actor.home.pos.y +
+                                           Math_SinS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
+            this->dyna.actor.world.pos.z = this->dyna.actor.home.pos.z +
+                                           Math_CosS(this->dyna.actor.shape.rot.y * this->velocity) * this->maxDistance;
             break;
         case BEANPLATFORM_STATIC:
         default:
             break;
     }
 
-    if(Math_Vec3f_DistXYZ(&this->dyna.actor.home.pos, &this->dyna.actor.world.pos) > this->maxDistance) {
+    if (Math_Vec3f_DistXYZ(&this->dyna.actor.home.pos, &this->dyna.actor.world.pos) > this->maxDistance) {
         this->velocity *= -1;
     }
 

@@ -72,7 +72,7 @@ void ItemShield_Init(Actor* thisx, PlayState* play) {
     switch (this->actor.params) {
         case 0:
         case 5:
-        this->actor.shape.rot.x = 0x4000;
+            this->actor.shape.rot.x = 0x4000;
         case 6:
             ActorShape_Init(&this->actor.shape, 1400.0f, NULL, 0.0f);
             ItemShield_SetupAction(this, func_80B86BC8);
@@ -91,7 +91,7 @@ void ItemShield_Init(Actor* thisx, PlayState* play) {
             break;
     }
 
-    if(this->actor.params == 5) {
+    if (this->actor.params == 5) {
         this->display = false;
     }
 
@@ -134,7 +134,7 @@ void func_80B86BC8(ItemShield* this, PlayState* play) {
         Actor_Kill(&this->actor);
         return;
     }
-    if(this->actor.params == 6) {
+    if (this->actor.params == 6) {
         func_8002F434(&this->actor, play, GI_SWORD_KOKIRI, 75.0f, 50.0f);
     } else {
         func_8002F434(&this->actor, play, GI_SHIELD_DEKU, 30.0f, 50.0f);
@@ -228,7 +228,7 @@ void ItemShield_Update(Actor* thisx, PlayState* play) {
 
     this->actionFunc(this, play);
 
-    if(this->actor.params == 6) {
+    if (this->actor.params == 6) {
         this->actor.shape.rot.y += 1000;
     }
 }
@@ -236,13 +236,13 @@ void ItemShield_Update(Actor* thisx, PlayState* play) {
 void ItemShield_Draw(Actor* thisx, PlayState* play) {
     ItemShield* this = (ItemShield*)thisx;
 
-    if(this->display && this->actor.params == 6) {
+    if (this->display && this->actor.params == 6) {
         OPEN_DISPS(play->state.gfxCtx, __FILE__, __LINE__);
 
         Gfx_SetupDL_25Opa(play->state.gfxCtx);
         gSPMatrix(POLY_OPA_DISP++, Matrix_NewMtx(play->state.gfxCtx, __FILE__, __LINE__),
                   G_MTX_NOPUSH | G_MTX_LOAD | G_MTX_MODELVIEW);
-        //gSPDisplayList(POLY_OPA_DISP++, gGiKokiriSwordDL);
+        // gSPDisplayList(POLY_OPA_DISP++, gGiKokiriSwordDL);
         gSPDisplayList(POLY_OPA_DISP++, gLinkChildKokiriSwordDL);
 
         CLOSE_DISPS(play->state.gfxCtx, __FILE__, __LINE__);

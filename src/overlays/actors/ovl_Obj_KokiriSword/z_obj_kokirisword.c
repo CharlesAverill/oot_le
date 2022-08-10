@@ -32,11 +32,9 @@ void ObjKokiriSword_Init(Actor* thisx, PlayState* play) {
 }
 
 void ObjKokiriSword_Destroy(Actor* thisx, PlayState* play) {
-
 }
 
 void ObjKokiriSword_Update(Actor* thisx, PlayState* play) {
-
 }
 
 void ObjKokiriSword_Draw(Actor* thisx, PlayState* play) {

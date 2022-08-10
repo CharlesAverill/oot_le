@@ -193,7 +193,7 @@ void func_80A4E648(EnGs* this, PlayState* play) {
                     this->actor.textId = 0x2053;
                 }
                 */
-               this->actor.textId = 0x2054;
+                this->actor.textId = 0x2054;
             }
         }
     }

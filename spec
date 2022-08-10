@@ -10555,3 +10555,20 @@ beginseg
     include "build/assets/scenes/overworld/learning01/learning01_room_1_model.o"
     number 3
 endseg
+
+beginseg
+    name "newmarket_scene"
+    romalign 0x1000
+    include "build/assets/scenes/overworld/newmarket/newmarket_scene_main.o"
+    include "build/assets/scenes/overworld/newmarket/newmarket_scene_col.o"
+    number 2
+endseg
+
+beginseg
+    name "newmarket_room_0"
+    romalign 0x1000
+    include "build/assets/scenes/overworld/newmarket/newmarket_room_0_main.o"
+    include "build/assets/scenes/overworld/newmarket/newmarket_room_0_model_info.o"
+    include "build/assets/scenes/overworld/newmarket/newmarket_room_0_model.o"
+    number 3
+endseg

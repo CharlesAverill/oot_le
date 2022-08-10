@@ -363,7 +363,7 @@ void func_80ACA7E0(EnOwl* this, PlayState* play) {
 }
 
 void EnOwl_ConfirmKokiriMessage(EnOwl* this, PlayState* play) {
-    if(Message_ShouldAdvance(play)) {
+    if (Message_ShouldAdvance(play)) {
         this->actionFunc = func_80ACA76C;
     }
     /*

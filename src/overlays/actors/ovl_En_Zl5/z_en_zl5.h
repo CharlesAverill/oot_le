@@ -4,6 +4,8 @@
 #include "ultra64.h"
 #include "global.h"
 
+struct EnZl4;
+
 typedef void (*EnZl5ActionFunc)(struct EnZl5*, PlayState*);
 
 typedef struct EnZl5 {
