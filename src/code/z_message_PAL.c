@@ -3140,7 +3140,7 @@ void Message_Update(PlayState* play) {
                             R_TEXTBOX_Y_TARGET = sTextboxUpperYPositions[var];
                         }
                     } else if (play->sceneId == SCENE_MARKET_DAY || play->sceneId == SCENE_MARKET_NIGHT ||
-                               play->sceneId == SCENE_MARKET_RUINS) {
+                               play->sceneId == SCENE_MARKET_RUINS || play->sceneId == SCENE_NEWMARKET) {
                         if (averageY < XREG(93)) {
                             R_TEXTBOX_Y_TARGET = sTextboxLowerYPositions[var];
                         } else {

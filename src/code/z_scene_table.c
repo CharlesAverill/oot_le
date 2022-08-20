@@ -1592,57 +1592,57 @@ void Scene_DrawConfigBesitu(PlayState* play) {
 }
 
 void (*sSceneDrawConfigs[SDC_MAX])(PlayState*) = {
-    Scene_DrawConfigDefault,               // SDC_DEFAULT
+    /*  0 */ Scene_DrawConfigDefault,               // SDC_DEFAULT
     Scene_DrawConfigSpot00,                // SDC_SPOT00
     Scene_DrawConfigSpot01,                // SDC_SPOT01
     Scene_DrawConfigSpot03,                // SDC_SPOT03
     Scene_DrawConfigSpot04,                // SDC_SPOT04
-    Scene_DrawConfigSpot06,                // SDC_SPOT06
+    /*  5 */ Scene_DrawConfigSpot06,                // SDC_SPOT06
     Scene_DrawConfigSpot07,                // SDC_SPOT07
     Scene_DrawConfigSpot08,                // SDC_SPOT08
     Scene_DrawConfigSpot09,                // SDC_SPOT09
     Scene_DrawConfigSpot10,                // SDC_SPOT10
-    Scene_DrawConfigSpot11,                // SDC_SPOT11
+    /* 10 */ Scene_DrawConfigSpot11,                // SDC_SPOT11
     Scene_DrawConfigSpot12,                // SDC_SPOT12
     Scene_DrawConfigSpot13,                // SDC_SPOT13
     Scene_DrawConfigSpot15,                // SDC_SPOT15
     Scene_DrawConfigSpot16,                // SDC_SPOT16
-    Scene_DrawConfigSpot17,                // SDC_SPOT17
+    /* 15 */ Scene_DrawConfigSpot17,                // SDC_SPOT17
     Scene_DrawConfigSpot18,                // SDC_SPOT18
     Scene_DrawConfigSpot20,                // SDC_SPOT20
     Scene_DrawConfigHidan,                 // SDC_HIDAN
     Scene_DrawConfigYdan,                  // SDC_YDAN
-    Scene_DrawConfigDdan,                  // SDC_DDAN
+    /* 20 */ Scene_DrawConfigDdan,                  // SDC_DDAN
     Scene_DrawConfigBdan,                  // SDC_BDAN
     Scene_DrawConfigBmori1,                // SDC_BMORI1
     Scene_DrawConfigMizusin,               // SDC_MIZUSIN
     Scene_DrawConfigHakadan,               // SDC_HAKADAN
-    Scene_DrawConfigJyasinzou,             // SDC_JYASINZOU
+    /* 25 */ Scene_DrawConfigJyasinzou,             // SDC_JYASINZOU
     Scene_DrawConfigGanontika,             // SDC_GANONTIKA
     Scene_DrawConfigMen,                   // SDC_MEN
     Scene_DrawConfigYdanBoss,              // SDC_YDAN_BOSS
     Scene_DrawConfigMizusinBs,             // SDC_MIZUSIN_BS
-    Scene_DrawConfigTokinoma,              // SDC_TOKINOMA
+    /* 30 */ Scene_DrawConfigTokinoma,              // SDC_TOKINOMA
     Scene_DrawConfigKakusiana,             // SDC_KAKUSIANA
     Scene_DrawConfigKenjyanoma,            // SDC_KENJYANOMA
     Scene_DrawConfigGreatFairyFountain,    // SDC_GREAT_FAIRY_FOUNTAIN
     Scene_DrawConfigSyatekijyou,           // SDC_SYATEKIJYOU
-    Scene_DrawConfigHairalNiwa,            // SDC_HAIRAL_NIWA
+    /* 35 */ Scene_DrawConfigHairalNiwa,            // SDC_HAIRAL_NIWA
     Scene_DrawConfigGanonCastleExterior,   // SDC_GANON_CASTLE_EXTERIOR
     Scene_DrawConfigIceDoukuto,            // SDC_ICE_DOUKUTO
     Scene_DrawConfigGanonFinal,            // SDC_GANON_FINAL
     Scene_DrawConfigFairyFountain,         // SDC_FAIRY_FOUNTAIN
-    Scene_DrawConfigGerudoway,             // SDC_GERUDOWAY
+    /* 40 */ Scene_DrawConfigGerudoway,             // SDC_GERUDOWAY
     Scene_DrawConfigBowling,               // SDC_BOWLING
     Scene_DrawConfigHakaanaOuke,           // SDC_HAKAANA_OUKE
     Scene_DrawConfigHyliaLabo,             // SDC_HYLIA_LABO
     Scene_DrawConfigSouko,                 // SDC_SOUKO
-    Scene_DrawConfigMiharigoya,            // SDC_MIHARIGOYA
+    /* 45 */ Scene_DrawConfigMiharigoya,            // SDC_MIHARIGOYA
     Scene_DrawConfigMahouya,               // SDC_MAHOUYA
     Scene_DrawConfigCalmWater,             // SDC_CALM_WATER
     Scene_DrawConfigGraveExitLightShining, // SDC_GRAVE_EXIT_LIGHT_SHINING
     Scene_DrawConfigBesitu,                // SDC_BESITU
-    Scene_DrawConfigTuribori,              // SDC_TURIBORI
+    /* 50 */ Scene_DrawConfigTuribori,              // SDC_TURIBORI
     Scene_DrawConfigGanonSonogo,           // SDC_GANON_SONOGO
     Scene_DrawConfigGanontikaSonogo,       // SDC_GANONTIKA_SONOGO
 };

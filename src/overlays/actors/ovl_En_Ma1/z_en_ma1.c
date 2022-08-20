@@ -187,7 +187,7 @@ s32 func_80AA08C4(EnMa1* this, PlayState* play) {
     if (!LINK_IS_CHILD) {
         return 0;
     }
-    if (((play->sceneId == SCENE_MARKET_NIGHT) || (play->sceneId == SCENE_MARKET_DAY)) &&
+    if (((play->sceneId == SCENE_MARKET_NIGHT) || (play->sceneId == SCENE_MARKET_DAY || play->sceneId == SCENE_NEWMARKET)) &&
         !GET_EVENTCHKINF(EVENTCHKINF_14) && !GET_INFTABLE(INFTABLE_8B)) {
         return 1;
     }

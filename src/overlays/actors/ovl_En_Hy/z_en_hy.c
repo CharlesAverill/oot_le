@@ -430,7 +430,7 @@ u16 func_80A6F810(PlayState* play, Actor* thisx) {
         case ENHY_TYPE_AOB:
             if (play->sceneId == SCENE_KAKARIKO) {
                 return (this->unk_330 & EVENTCHKINF_6B_MASK) ? 0x508D : (GET_INFTABLE(INFTABLE_CB) ? 0x508C : 0x508B);
-            } else if (play->sceneId == SCENE_MARKET_DAY) {
+            } else if (play->sceneId == SCENE_MARKET_DAY || play->sceneId == SCENE_NEWMARKET) {
                 return GET_EVENTINF(EVENTINF_30) ? 0x709B : 0x709C;
             } else if (gSaveContext.dogIsLost) {
                 s16 followingDog = (gSaveContext.dogParams & 0xF00) >> 8;
@@ -903,7 +903,7 @@ void EnHy_InitImpl(EnHy* this, PlayState* play) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
         Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, sModelInfo[this->actor.params & 0x7F].animInfoIndex);
 
-        if ((play->sceneId == SCENE_MARKET_ALLEY) || (play->sceneId == SCENE_MARKET_DAY)) {
+        if ((play->sceneId == SCENE_MARKET_ALLEY) || (play->sceneId == SCENE_MARKET_DAY || play->sceneId == SCENE_NEWMARKET)) {
             this->actor.flags &= ~ACTOR_FLAG_4;
             this->actor.uncullZoneScale = 0.0f;
         }
@@ -927,7 +927,7 @@ void EnHy_InitImpl(EnHy* this, PlayState* play) {
                 this->actionFunc = func_80A712C0;
                 break;
             case ENHY_TYPE_AOB:
-                if (play->sceneId == SCENE_MARKET_DAY) {
+                if (play->sceneId == SCENE_MARKET_DAY || play->sceneId == SCENE_NEWMARKET) {
                     this->actionFunc = func_80A710F8;
                     break;
                 }

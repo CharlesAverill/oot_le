@@ -122,4 +122,4 @@
 /* 0x6D */ DEFINE_SCENE(testroom_scene, none, SCENE_TESTROOM, SDC_DEFAULT, 0, 0)
 // Added scenes
 /* 0x6E */ DEFINE_SCENE(learning01_scene, none, SCENE_LEARNING01, SDC_DEFAULT, 0, 0)
-/* 0x6F */ DEFINE_SCENE(newmarket_scene, none, SCENE_NEWMARKET, SDC_DEFAULT, 0, 0)
+/* 0x6F */ DEFINE_SCENE(newmarket_scene, none, SCENE_NEWMARKET, SDC_YDAN, 0, 0)

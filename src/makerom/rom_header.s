@@ -13,6 +13,6 @@
 .ascii "THE LEGEND OF ZELDA "   /* Internal ROM name */
 .word  0x00000000               /* Unknown */
 .word  0x0000004E               /* Cartridge */
-.ascii "ZL"                     /* Cartridge ID */
+.ascii "LE"                     /* Cartridge ID */
 .ascii "E"                      /* Region */
 .byte  0x0F                     /* Version */
