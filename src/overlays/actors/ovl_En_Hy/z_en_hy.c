@@ -868,6 +868,7 @@ s32 EnHy_ShouldSpawn(EnHy* this, PlayState* play) {
 }
 
 void EnHy_Init(Actor* thisx, PlayState* play) {
+    osSyncPrintf("EN_HY INIT: %d", thisx->params);
     EnHy* this = (EnHy*)thisx;
 
     if ((this->actor.params & 0x7F) >= ENHY_TYPE_MAX || !EnHy_FindOsAnimeObject(this, play) ||

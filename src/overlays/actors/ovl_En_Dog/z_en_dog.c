@@ -181,7 +181,7 @@ s8 EnDog_CanFollow(EnDog* this, PlayState* play) {
         return 2;
     }
 
-    if (play->sceneId == SCENE_MARKET_DAY) {
+    if (play->sceneId == SCENE_MARKET_DAY || play->sceneId == SCENE_NEWMARKET) {
         return 0;
     }
 
