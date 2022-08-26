@@ -157,6 +157,8 @@ void EnWood02_SpawnOffspring(EnWood02* this, PlayState* play) {
     }
 }
 
+static bool sIsSpawned[16];
+
 void EnWood02_Init(Actor* thisx, PlayState* play2) {
     s16 spawnType;
     f32 actorScale;
@@ -166,6 +168,20 @@ void EnWood02_Init(Actor* thisx, PlayState* play2) {
     s32 bgId;
     f32 floorY;
     s16 extraRot;
+    u8 paramIndex = (thisx->params & 0xF0) >> 4;
+
+    if(play2->sceneId == SCENE_NEWMARKET && paramIndex != 0) {
+        osSyncPrintf("EN_WOOD02 ID: %d\n", paramIndex);
+        osSyncPrintf("SPAWNED: %d\n", sIsSpawned[paramIndex - 1]);
+        thisx->room = -1;
+        if(!sIsSpawned[paramIndex - 1]) {
+            sIsSpawned[paramIndex - 1] = true;
+        } else {
+            Actor_Kill(thisx);
+        }
+
+        thisx->params &= 0xFF0F;
+    }
 
     spawnType = WOOD_SPAWN_NORMAL;
     actorScale = 1.0f;

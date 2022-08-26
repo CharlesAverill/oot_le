@@ -10582,3 +10582,12 @@ beginseg
     include "build/assets/scenes/overworld/newmarket/newmarket_room_1_model.o"
     number 3
 endseg
+
+beginseg
+    name "newmarket_room_2"
+    romalign 0x1000
+    include "build/assets/scenes/overworld/newmarket/newmarket_room_2_main.o"
+    include "build/assets/scenes/overworld/newmarket/newmarket_room_2_model_info.o"
+    include "build/assets/scenes/overworld/newmarket/newmarket_room_2_model.o"
+    number 3
+endseg

@@ -844,6 +844,11 @@ s32 EnHy_ShouldSpawn(EnHy* this, PlayState* play) {
             } else {
                 return true;
             }
+        case SCENE_NEWMARKET:
+            if(IS_NIGHT) {
+                return false;
+            }
+            // No break on purpose
         case SCENE_MARKET_ALLEY:
         case SCENE_MARKET_ALLEY_N:
             if ((this->actor.params & 0x7F) != ENHY_TYPE_BOJ_14) {
@@ -867,9 +872,11 @@ s32 EnHy_ShouldSpawn(EnHy* this, PlayState* play) {
     }
 }
 
+static bool sIsSpawned[ENHY_TYPE_MAX];
+
 void EnHy_Init(Actor* thisx, PlayState* play) {
-    osSyncPrintf("EN_HY INIT: %d", thisx->params);
     EnHy* this = (EnHy*)thisx;
+    u8 paramIndex = thisx->params & ~0x780;
 
     if ((this->actor.params & 0x7F) >= ENHY_TYPE_MAX || !EnHy_FindOsAnimeObject(this, play) ||
         !EnHy_FindSkelAndHeadObjects(this, play)) {
@@ -881,6 +888,18 @@ void EnHy_Init(Actor* thisx, PlayState* play) {
     }
 
     this->actionFunc = EnHy_InitImpl;
+
+    if(thisx->params & 0xF000) {
+        osSyncPrintf("EN_HY ID: %d\n", paramIndex);
+        osSyncPrintf("SPAWNED: %d\n", sIsSpawned[paramIndex]);
+        thisx->room = -1;
+        if(!sIsSpawned[paramIndex]) {
+            sIsSpawned[paramIndex] = true;
+        } else {
+            Actor_Kill(thisx);
+        }
+    }
+    
 }
 
 void EnHy_Destroy(Actor* thisx, PlayState* play) {
