@@ -279,7 +279,7 @@ void BgDyYoseizo_ChooseType(BgDyYoseizo* this, PlayState* play) {
                         gSaveContext.cutsceneTrigger = 1;
                         break;
                     case FAIRY_UPGRADE_DOUBLE_DEFENSE:
-                        play->csCtx.segment = SEGMENTED_TO_VIRTUAL(gGreatFairyDoubleDefenseCs);
+                        play->csCtx.segment = SEGMENTED_TO_VIRTUAL(gGreatFairyDoubleDefenceCs);
                         gSaveContext.cutsceneTrigger = 1;
                         break;
                 }

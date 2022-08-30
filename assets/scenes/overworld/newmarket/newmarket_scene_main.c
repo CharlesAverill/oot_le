@@ -17,7 +17,7 @@ SCmdBase newmarket_scene_header00[] = {
 	SCENE_CMD_ENTRANCE_LIST(newmarket_scene_header00_entranceList),
 	SCENE_CMD_SPECIAL_FILES(0x00, 0x0002),
 	SCENE_CMD_PATH_LIST(newmarket_scene_pathway),
-	SCENE_CMD_SPAWN_LIST(1, newmarket_scene_header00_startPositionList),
+	SCENE_CMD_SPAWN_LIST(8, newmarket_scene_header00_startPositionList),
 	SCENE_CMD_SKYBOX_SETTINGS(0x01, 0x00, 0x00),
 	SCENE_CMD_EXIT_LIST(newmarket_scene_header00_exitList),
 	SCENE_CMD_ENV_LIGHT_SETTINGS(4, newmarket_scene_header00_lightSettings),
@@ -26,25 +26,32 @@ SCmdBase newmarket_scene_header00[] = {
 
 ActorEntry newmarket_scene_header00_startPositionList[] = {
 	{ ACTOR_PLAYER, 16, -408, 191, 0, 0, 0, 0x0FFF },
+	{ ACTOR_PLAYER, -96, -408, 258, 0, 16384, 0, 0x0FFF },
+	{ ACTOR_PLAYER, -520, -408, 1592, 0, 16384, 0, 0x0FFF },
+	{ ACTOR_PLAYER, -520, -408, 1983, 0, 16384, 0, 0x0FFF },
+	{ ACTOR_PLAYER, -368, -408, 2410, 0, 32768, 0, 0x0FFF },
+	{ ACTOR_PLAYER, 227, -408, 2410, 0, 32768, 0, 0x0FFF },
+	{ ACTOR_PLAYER, 379, -408, 1899, 0, 49152, 0, 0x0FFF },
+	{ ACTOR_PLAYER, 302, -408, 1465, 0, 0, 0, 0x0FFF },
 };
 
 TransitionActorEntry newmarket_scene_header00_transitionActors[16] = {
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -368, -412, 2430, 32768, 0x01BF },
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_HOLL, 637, -408, 2365, 49152, 0x013F },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -369, -412, 2430, 32768, 0x01BF },
+	{ 0, 0x00, 1, 0x00, ACTOR_EN_HOLL, 41, -408, 869, 0, 0x013F },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1983, 16384, 0x01BF },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -369, -412, 2430, 32768, 0x01BF },
 	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, 302, -411, 1452, 0, 0x028D },
-	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 302, -411, 1452, 0, 0x028D },
+	{ 0, 0x00, 0, 0x00, ACTOR_EN_DOOR, -116, -410, 259, 16384, 0x01BF },
 	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 227, -412, 2430, 32768, 0x01BF },
-	{ 0, 0x00, 0, 0x00, ACTOR_EN_DOOR, -116, -410, 223, 16384, 0x01BF },
 	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1591, 16384, 0x01BF },
 	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 396, -412, 1899, 49152, 0x01BF },
 	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, 227, -412, 2430, 32768, 0x01BF },
-	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -368, -412, 2430, 32768, 0x01BF },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_HOLL, 637, -408, 1522, 49152, 0x013F },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1591, 16384, 0x01BF },
 	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1983, 16384, 0x01BF },
 	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, 396, -412, 1899, 49152, 0x01BF },
-	{ 0, 0x00, 1, 0x00, ACTOR_EN_HOLL, 41, -408, 869, 0, 0x013F },
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1591, 16384, 0x01BF },
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_HOLL, 637, -408, 1522, 49152, 0x013F },
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1983, 16384, 0x01BF },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_HOLL, 637, -408, 2365, 49152, 0x013F },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 302, -411, 1452, 0, 0x028D },
 };
 
 extern u8 _newmarket_room_0SegmentRomStart[];
@@ -62,6 +69,13 @@ RomFile newmarket_scene_roomList[] = {
 
 EntranceEntry newmarket_scene_header00_entranceList[] = {
 	{ 0, 0 },
+	{ 1, 0 },
+	{ 2, 1 },
+	{ 3, 1 },
+	{ 4, 1 },
+	{ 5, 1 },
+	{ 6, 1 },
+	{ 7, 1 },
 };
 
 u16 newmarket_scene_header00_exitList[9] = {

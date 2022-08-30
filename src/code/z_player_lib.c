@@ -853,7 +853,8 @@ void* sMouthTextures[][4] = {
 
 Color_RGB8 sTunicColors[PLAYER_TUNIC_MAX] = {
     // PLAYER_TUNIC_KOKIRI
-    { 17, 203, 137 },
+    {69, 142, 114},
+    //{ 17, 203, 137 },
     //{ 30, 105, 27 },
     // PLAYER_TUNIC_GORON
     { 158, 50, 0 },

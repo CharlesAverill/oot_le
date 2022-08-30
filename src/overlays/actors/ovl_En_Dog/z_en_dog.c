@@ -244,6 +244,10 @@ void EnDog_Init(Actor* thisx, PlayState* play) {
     s16 followingDog;
     s32 pad;
 
+    if(play->sceneId == SCENE_NEWMARKET && thisx->params == 0x30) {
+        Actor_Kill(this);
+    }
+
     ActorShape_Init(&this->actor.shape, 0.0f, ActorShadow_DrawCircle, 24.0f);
     SkelAnime_InitFlex(play, &this->skelAnime, &gDogSkel, NULL, this->jointTable, this->morphTable, 13);
     Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, ENDOG_ANIM_0);

@@ -25,7 +25,7 @@ s16 newmarket_room_0_header00_objectList[2] = {
 };
 
 ActorEntry newmarket_room_0_header00_actorList[2] = {
-	{ ACTOR_EN_HEISHI4, -84, -408, 173, 0, 9390, 0, 0xFF08 },
 	{ ACTOR_EN_RIVER_SOUND, -2, -408, 402, 0, 0, 0, 0x000B },
+	{ ACTOR_EN_HEISHI4, -84, -408, 173, 0, 9390, 0, 0xFF08 },
 };
 

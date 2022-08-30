@@ -228,8 +228,11 @@ void EnKusa_InitCollider(Actor* thisx, PlayState* play) {
     Collider_UpdateCylinder(&this->actor, &this->collider);
 }
 
+static bool sIsSpawned[8];
+
 void EnKusa_Init(Actor* thisx, PlayState* play) {
     EnKusa* this = (EnKusa*)thisx;
+    u8 paramIndex = (thisx->params & 0x00F0) >> 4;
 
     Actor_ProcessInitChain(&this->actor, sInitChain);
 
@@ -263,6 +266,19 @@ void EnKusa_Init(Actor* thisx, PlayState* play) {
     }
 
     EnKusa_SetupWaitObject(this);
+
+    if(play->sceneId == SCENE_NEWMARKET) {
+        osSyncPrintf("EN_KUSA ID: %d\n", paramIndex);
+        osSyncPrintf("SPAWNED: %d\n", sIsSpawned[paramIndex - 1]);
+        thisx->room = -1;
+        if(!sIsSpawned[paramIndex - 1]) {
+            sIsSpawned[paramIndex - 1] = true;
+        } else {
+            Actor_Kill(thisx);
+        }
+
+        thisx->params &= 0xFF0F;
+    }
 }
 
 void EnKusa_Destroy(Actor* thisx, PlayState* play2) {

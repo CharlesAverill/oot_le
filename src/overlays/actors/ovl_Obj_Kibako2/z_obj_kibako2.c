@@ -114,6 +114,8 @@ void ObjKibako2_SpawnCollectible(ObjKibako2* this, PlayState* play) {
     }
 }
 
+static bool sIsSpawned[8];
+
 void ObjKibako2_Init(Actor* thisx, PlayState* play) {
     ObjKibako2* this = (ObjKibako2*)thisx;
     s16 pad;
@@ -133,6 +135,19 @@ void ObjKibako2_Init(Actor* thisx, PlayState* play) {
     // "Wooden box (stationary)"
     osSyncPrintf("木箱(据置)(arg %04xH)(item %04xH %d)\n", this->dyna.actor.params, this->collectibleFlag,
                  this->dyna.actor.home.rot.x);
+    
+    if(play->sceneId == SCENE_NEWMARKET && thisx->params != 0) {
+        osSyncPrintf("OBJ_KIBAKO2 ID: %d\n", thisx->params);
+        osSyncPrintf("SPAWNED: %d\n", sIsSpawned[thisx->params - 1]);
+        thisx->room = -1;
+        if(!sIsSpawned[thisx->params - 1]) {
+            sIsSpawned[thisx->params - 1] = true;
+        } else {
+            Actor_Kill(thisx);
+        }
+
+        thisx->params = 0;
+    }
 }
 
 void ObjKibako2_Destroy(Actor* thisx, PlayState* play) {

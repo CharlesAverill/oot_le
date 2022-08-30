@@ -876,7 +876,7 @@ static bool sIsSpawned[ENHY_TYPE_MAX];
 
 void EnHy_Init(Actor* thisx, PlayState* play) {
     EnHy* this = (EnHy*)thisx;
-    u8 paramIndex = thisx->params & ~0x780;
+    u8 paramIndex = thisx->params & 0x3F;
 
     if ((this->actor.params & 0x7F) >= ENHY_TYPE_MAX || !EnHy_FindOsAnimeObject(this, play) ||
         !EnHy_FindSkelAndHeadObjects(this, play)) {
@@ -889,9 +889,10 @@ void EnHy_Init(Actor* thisx, PlayState* play) {
 
     this->actionFunc = EnHy_InitImpl;
 
-    if(thisx->params & 0xF000) {
+    if(play->sceneId == SCENE_NEWMARKET && thisx->params & 0xF000) {
         osSyncPrintf("EN_HY ID: %d\n", paramIndex);
         osSyncPrintf("SPAWNED: %d\n", sIsSpawned[paramIndex]);
+        osSyncPrintf("ROOM: %d\n", thisx->room);
         thisx->room = -1;
         if(!sIsSpawned[paramIndex]) {
             sIsSpawned[paramIndex] = true;

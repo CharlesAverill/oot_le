@@ -58,6 +58,10 @@ void EnNiwGirl_Init(Actor* thisx, PlayState* play) {
     Vec3f vec2;
     s32 pad2;
 
+    if(play->sceneId == SCENE_NEWMARKET && IS_NIGHT) {
+        Actor_Kill(this);
+    }
+
     SkelAnime_InitFlex(play, &this->skelAnime, &gNiwGirlSkel, &gNiwGirlRunAnim, this->jointTable, this->morphTable, 17);
     Collider_InitCylinder(play, &this->collider);
     Collider_SetCylinder(play, &this->collider, &this->actor, &sCylinderInit);
