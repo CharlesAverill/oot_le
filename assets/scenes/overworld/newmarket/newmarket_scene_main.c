@@ -9,6 +9,7 @@
 #include "variables.h"
 
 SCmdBase newmarket_scene_header00[] = {
+	SCENE_CMD_ALTERNATE_HEADER_LIST(newmarket_scene_alternateHeaders),
 	SCENE_CMD_SOUND_SETTINGS(0x00, 0x00, 0x1D),
 	SCENE_CMD_ROOM_LIST(3, newmarket_scene_roomList),
 	SCENE_CMD_TRANSITION_ACTOR_LIST(16, newmarket_scene_header00_transitionActors),
@@ -24,6 +25,12 @@ SCmdBase newmarket_scene_header00[] = {
 	SCENE_CMD_END(),
 };
 
+SCmdBase* newmarket_scene_alternateHeaders[] = {
+	newmarket_scene_header01,
+	0,
+	0,
+};
+
 ActorEntry newmarket_scene_header00_startPositionList[] = {
 	{ ACTOR_PLAYER, 16, -408, 191, 0, 0, 0, 0x0FFF },
 	{ ACTOR_PLAYER, -96, -408, 258, 0, 16384, 0, 0x0FFF },
@@ -36,22 +43,22 @@ ActorEntry newmarket_scene_header00_startPositionList[] = {
 };
 
 TransitionActorEntry newmarket_scene_header00_transitionActors[16] = {
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -369, -412, 2430, 32768, 0x01BF },
-	{ 0, 0x00, 1, 0x00, ACTOR_EN_HOLL, 41, -408, 869, 0, 0x013F },
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1983, 16384, 0x01BF },
-	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -369, -412, 2430, 32768, 0x01BF },
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, 302, -411, 1452, 0, 0x028D },
-	{ 0, 0x00, 0, 0x00, ACTOR_EN_DOOR, -116, -410, 259, 16384, 0x01BF },
-	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 227, -412, 2430, 32768, 0x01BF },
-	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1591, 16384, 0x01BF },
-	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 396, -412, 1899, 49152, 0x01BF },
 	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, 227, -412, 2430, 32768, 0x01BF },
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_HOLL, 637, -408, 1522, 49152, 0x013F },
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1591, 16384, 0x01BF },
-	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1983, 16384, 0x01BF },
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, 396, -412, 1899, 49152, 0x01BF },
-	{ 2, 0x00, 1, 0x00, ACTOR_EN_HOLL, 637, -408, 2365, 49152, 0x013F },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 396, -412, 1899, 49152, 0x01BF },
 	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 302, -411, 1452, 0, 0x028D },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_HOLL, 637, -408, 2365, 49152, 0x013F },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1591, 16384, 0x01BF },
+	{ 0, 0x00, 0, 0x00, ACTOR_EN_DOOR, -116, -410, 259, 16384, 0x01BF },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1983, 16384, 0x01BF },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1983, 16384, 0x01BF },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -369, -412, 2430, 32768, 0x01BF },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, 396, -412, 1899, 49152, 0x01BF },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, 302, -411, 1452, 0, 0x028D },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1591, 16384, 0x01BF },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -369, -412, 2430, 32768, 0x01BF },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 227, -412, 2430, 32768, 0x01BF },
+	{ 0, 0x00, 1, 0x00, ACTOR_EN_HOLL, 41, -408, 869, 0, 0x013F },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_HOLL, 637, -408, 1522, 49152, 0x013F },
 };
 
 extern u8 _newmarket_room_0SegmentRomStart[];
@@ -238,5 +245,81 @@ Path newmarket_scene_pathway[4] = {
 	{ 19, newmarket_pathwayList_1 },
 	{ 44, newmarket_pathwayList_2 },
 	{ 44, newmarket_pathwayList_3 },
+};
+
+SCmdBase newmarket_scene_header01[] = {
+	SCENE_CMD_SOUND_SETTINGS(0x00, 0x00, 0x02),
+	SCENE_CMD_ROOM_LIST(3, newmarket_scene_roomList),
+	SCENE_CMD_TRANSITION_ACTOR_LIST(16, newmarket_scene_header01_transitionActors),
+	SCENE_CMD_MISC_SETTINGS(0x00, 0x00),
+	SCENE_CMD_COL_HEADER(&newmarket_collisionHeader),
+	SCENE_CMD_ENTRANCE_LIST(newmarket_scene_header01_entranceList),
+	SCENE_CMD_SPECIAL_FILES(0x00, 0x0002),
+	SCENE_CMD_PATH_LIST(newmarket_scene_pathway),
+	SCENE_CMD_SPAWN_LIST(8, newmarket_scene_header01_startPositionList),
+	SCENE_CMD_SKYBOX_SETTINGS(0x01, 0x00, 0x00),
+	SCENE_CMD_EXIT_LIST(newmarket_scene_header01_exitList),
+	SCENE_CMD_ENV_LIGHT_SETTINGS(4, newmarket_scene_header01_lightSettings),
+	SCENE_CMD_END(),
+};
+
+ActorEntry newmarket_scene_header01_startPositionList[] = {
+	{ ACTOR_PLAYER, 16, -408, 191, 0, 0, 0, 0x0FFF },
+	{ ACTOR_PLAYER, -96, -408, 258, 0, 16384, 0, 0x0FFF },
+	{ ACTOR_PLAYER, -520, -408, 1592, 0, 16384, 0, 0x0FFF },
+	{ ACTOR_PLAYER, -520, -408, 1983, 0, 16384, 0, 0x0FFF },
+	{ ACTOR_PLAYER, -368, -408, 2410, 0, 32768, 0, 0x0FFF },
+	{ ACTOR_PLAYER, 227, -408, 2410, 0, 32768, 0, 0x0FFF },
+	{ ACTOR_PLAYER, 379, -408, 1899, 0, 49152, 0, 0x0FFF },
+	{ ACTOR_PLAYER, 302, -408, 1465, 0, 0, 0, 0x0FFF },
+};
+
+TransitionActorEntry newmarket_scene_header01_transitionActors[16] = {
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, 227, -412, 2430, 32768, 0x01BF },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 396, -412, 1899, 49152, 0x01BF },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 302, -411, 1452, 0, 0x028D },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_HOLL, 637, -408, 2365, 49152, 0x013F },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1591, 16384, 0x01BF },
+	{ 0, 0x00, 0, 0x00, ACTOR_EN_DOOR, -116, -410, 259, 16384, 0x01BF },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1983, 16384, 0x01BF },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1983, 16384, 0x01BF },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, -369, -412, 2430, 32768, 0x01BF },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, 396, -412, 1899, 49152, 0x01BF },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_DOOR, 302, -411, 1452, 0, 0x028D },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -544, -412, 1591, 16384, 0x01BF },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, -369, -412, 2430, 32768, 0x01BF },
+	{ 1, 0x00, 1, 0x00, ACTOR_EN_DOOR, 227, -412, 2430, 32768, 0x01BF },
+	{ 0, 0x00, 1, 0x00, ACTOR_EN_HOLL, 41, -408, 869, 0, 0x013F },
+	{ 2, 0x00, 1, 0x00, ACTOR_EN_HOLL, 637, -408, 1522, 49152, 0x013F },
+};
+
+EntranceEntry newmarket_scene_header01_entranceList[] = {
+	{ 5, 1 },
+	{ 2, 1 },
+	{ 1, 0 },
+	{ 3, 1 },
+	{ 6, 1 },
+	{ 0, 0 },
+	{ 7, 1 },
+	{ 4, 1 },
+};
+
+u16 newmarket_scene_header01_exitList[9] = {
+	0x0B7,
+	0x07E,
+	0x388,
+	0x530,
+	0x03B,
+	0x507,
+	0x0CD,
+	0x138,
+	0x063,
+};
+
+LightSettings newmarket_scene_header01_lightSettings[4] = {
+	{ 0x8F, 0x6E, 0x82, 0x49, 0x49, 0x49, 0xDB, 0xCC, 0xC2, 0xB7, 0xB7, 0xB7, 0x4F, 0x4F, 0x85, 0xC4, 0xB6, 0xAF, 0x07E1, 0x3200 },
+	{ 0x8F, 0x6E, 0x82, 0x49, 0x49, 0x49, 0xDB, 0xCC, 0xC2, 0xB7, 0xB7, 0xB7, 0x4F, 0x4F, 0x85, 0xC4, 0xB6, 0xAF, 0x07E1, 0x3200 },
+	{ 0x8F, 0x6E, 0x82, 0x49, 0x49, 0x49, 0xDB, 0xCC, 0xC2, 0xB7, 0xB7, 0xB7, 0x4F, 0x4F, 0x85, 0xC4, 0xB6, 0xAF, 0x07E1, 0x3200 },
+	{ 0x8F, 0x6E, 0x82, 0x49, 0x49, 0x49, 0xDB, 0xCC, 0xC2, 0xB7, 0xB7, 0xB7, 0x4F, 0x4F, 0x85, 0xC4, 0xB6, 0xAF, 0x07E1, 0x3200 },
 };
 
