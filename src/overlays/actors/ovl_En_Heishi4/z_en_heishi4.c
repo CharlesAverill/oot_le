@@ -55,8 +55,26 @@ static ColliderCylinderInit sCylinderInit = {
     { 33, 40, 0, { 0, 0, 0 } },
 };
 
+static bool sIsSpawned[8];
+
 void EnHeishi4_Init(Actor* thisx, PlayState* play) {
     EnHeishi4* this = (EnHeishi4*)thisx;
+    u8 paramIndex = (thisx->params & 0xF0) >> 4;
+
+    if(play->sceneId == SCENE_NEWMARKET && paramIndex) {
+        osSyncPrintf("EN_HEISHI4 ID: %d\n", paramIndex);
+        osSyncPrintf("SPAWNED: %d\n", sIsSpawned[paramIndex]);
+        osSyncPrintf("ROOM: %d\n", thisx->room);
+        /*
+        thisx->room = -1;
+        if(!sIsSpawned[paramIndex - 1]) {
+            sIsSpawned[paramIndex - 1] = true;
+        } else {
+            Actor_Kill(thisx);
+        }
+        */
+       thisx->params &= 0xFF0F;
+    }
 
     Actor_SetScale(thisx, 0.01f);
     this->type = thisx->params & 0xFF;
@@ -197,7 +215,7 @@ void func_80A56614(EnHeishi4* this, PlayState* play) {
         } else {
             this->actor.textId = 0x709A;
         }
-    } else if (play->sceneId != SCENE_MARKET_NIGHT) {
+    } else if (play->sceneId != SCENE_MARKET_NIGHT && !(play->sceneId == SCENE_NEWMARKET && IS_NIGHT)) {
         if (IS_DAY) {
             this->actor.textId = 0x7002;
         } else {

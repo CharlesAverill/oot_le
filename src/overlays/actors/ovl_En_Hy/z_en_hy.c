@@ -845,10 +845,6 @@ s32 EnHy_ShouldSpawn(EnHy* this, PlayState* play) {
                 return true;
             }
         case SCENE_NEWMARKET:
-            if(IS_NIGHT) {
-                return false;
-            }
-            // No break on purpose
         case SCENE_MARKET_ALLEY:
         case SCENE_MARKET_ALLEY_N:
             if ((this->actor.params & 0x7F) != ENHY_TYPE_BOJ_14) {
@@ -924,7 +920,7 @@ void EnHy_InitImpl(EnHy* this, PlayState* play) {
         CollisionCheck_SetInfo2(&this->actor.colChkInfo, NULL, &sColChkInfoInit);
         Animation_ChangeByInfo(&this->skelAnime, sAnimationInfo, sModelInfo[this->actor.params & 0x7F].animInfoIndex);
 
-        if ((play->sceneId == SCENE_MARKET_ALLEY) || (play->sceneId == SCENE_MARKET_DAY || play->sceneId == SCENE_NEWMARKET)) {
+        if ((play->sceneId == SCENE_MARKET_ALLEY) || (play->sceneId == SCENE_MARKET_DAY) || (IS_DAY && play->sceneId == SCENE_NEWMARKET)) {
             this->actor.flags &= ~ACTOR_FLAG_4;
             this->actor.uncullZoneScale = 0.0f;
         }
@@ -948,7 +944,7 @@ void EnHy_InitImpl(EnHy* this, PlayState* play) {
                 this->actionFunc = func_80A712C0;
                 break;
             case ENHY_TYPE_AOB:
-                if (play->sceneId == SCENE_MARKET_DAY || play->sceneId == SCENE_NEWMARKET) {
+                if (play->sceneId == SCENE_MARKET_DAY || (IS_DAY && play->sceneId == SCENE_NEWMARKET)) {
                     this->actionFunc = func_80A710F8;
                     break;
                 }

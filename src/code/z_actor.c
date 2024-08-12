@@ -1485,7 +1485,8 @@ TargetRangeParams D_80115FF8[] = { TARGET_RANGE(70, 140),
                                    TARGET_RANGE(140, 163.33333),
                                    TARGET_RANGE(240, 576),
                                    TARGET_RANGE(280, 280000),
-                                   TARGET_RANGE(0, 1) };
+                                   TARGET_RANGE(0, 1),
+                                   TARGET_RANGE(300, 1050) };
 
 u32 func_8002F090(Actor* actor, f32 arg1) {
     return arg1 < D_80115FF8[actor->targetMode].rangeSq;
@@ -3405,6 +3406,7 @@ void Actor_SetTextWithPrefix(PlayState* play, Actor* actor, s16 baseTextId) {
         case SCENE_MARKET_DAY:
         case SCENE_MARKET_NIGHT:
         case SCENE_MARKET_RUINS:
+        case SCENE_NEWMARKET:
         case SCENE_SPOT15:
             prefix = 0x7000;
             break;

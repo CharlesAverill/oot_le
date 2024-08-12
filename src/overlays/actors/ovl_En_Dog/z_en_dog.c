@@ -181,7 +181,7 @@ s8 EnDog_CanFollow(EnDog* this, PlayState* play) {
         return 2;
     }
 
-    if (play->sceneId == SCENE_MARKET_DAY || play->sceneId == SCENE_NEWMARKET) {
+    if (play->sceneId == SCENE_MARKET_DAY || (IS_DAY && play->sceneId == SCENE_NEWMARKET)) {
         return 0;
     }
 
@@ -271,6 +271,10 @@ void EnDog_Init(Actor* thisx, PlayState* play) {
     this->path = Path_GetByIndex(play, (this->actor.params & 0x00F0) >> 4, 0xF);
 
     switch (play->sceneId) {
+        case SCENE_NEWMARKET:
+            if(IS_DAY) {
+                break;
+            }
         case SCENE_MARKET_NIGHT:
             if ((!gSaveContext.dogIsLost) && (((this->actor.params & 0x0F00) >> 8) == 1)) {
                 Actor_Kill(&this->actor);

@@ -21,7 +21,7 @@ Gfx newmarket_room_0_entry_0_opaque[] = {
 	gsSPDisplayList(newmarket_dl_spot15_room_0DL_006A20_mesh_001_mesh_layer_Opaque),
 	gsSPDisplayList(newmarket_dl_spot15_room_0DL_007278_mesh_001_mesh_layer_Opaque),
 	gsSPDisplayList(newmarket_dl_spot15_room_0DL_008728_mesh_001_mesh_layer_Opaque),
-	gsSPDisplayList(newmarket_dl_Floor_001_mesh_layer_Opaque),
+	gsSPDisplayList(newmarket_dl_Floor_Entrance_mesh_layer_Opaque),
 	gsSPDisplayList(newmarket_dl_Market_Entrance_Mesh_mesh_layer_Opaque),
 	gsSPEndDisplayList(),
 };
@@ -1261,7 +1261,7 @@ Gfx newmarket_dl_spot15_room_0DL_008728_mesh_001_mesh_layer_Opaque_tri_2[] = {
 	gsSPEndDisplayList(),
 };
 
-Vtx newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_cull[8] = {
+Vtx newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_cull[8] = {
 	{{{-540, -408, 3123},0, {-16, -16},{0x0, 0x0, 0x0, 0x0}}},
 	{{{-540, -408, 3123},0, {-16, -16},{0x0, 0x0, 0x0, 0x0}}},
 	{{{-540, -408, 150},0, {-16, -16},{0x0, 0x0, 0x0, 0x0}}},
@@ -1272,7 +1272,7 @@ Vtx newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_cull[8] = {
 	{{{622, -408, 150},0, {-16, -16},{0x0, 0x0, 0x0, 0x0}}},
 };
 
-Vtx newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_0[29] = {
+Vtx newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_0[29] = {
 	{{{144, -408, 352},0, {2351, -6495},{0x0, 0x7F, 0x0, 0xFF}}},
 	{{{144, -408, 395},0, {2351, -5548},{0x0, 0x7F, 0x0, 0xFF}}},
 	{{{367, -408, 395},0, {7309, -5540},{0x0, 0x7F, 0x0, 0xFF}}},
@@ -1304,8 +1304,8 @@ Vtx newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_0[29] = {
 	{{{92, -408, 1455},0, {1192, 9843},{0x0, 0x7F, 0x0, 0xFF}}},
 };
 
-Gfx newmarket_dl_Floor_001_mesh_layer_Opaque_tri_0[] = {
-	gsSPVertex(newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_0 + 0, 29, 0),
+Gfx newmarket_dl_Floor_Entrance_mesh_layer_Opaque_tri_0[] = {
+	gsSPVertex(newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_0 + 0, 29, 0),
 	gsSP2Triangles(0, 1, 2, 0, 3, 4, 5, 0),
 	gsSP2Triangles(5, 6, 3, 0, 5, 7, 6, 0),
 	gsSP2Triangles(8, 9, 10, 0, 8, 10, 11, 0),
@@ -1318,7 +1318,7 @@ Gfx newmarket_dl_Floor_001_mesh_layer_Opaque_tri_0[] = {
 	gsSPEndDisplayList(),
 };
 
-Vtx newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_1[80] = {
+Vtx newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_1[80] = {
 	{{{-38, -408, 1456},0, {-10074, -5890},{0x7F, 0x0, 0x0, 0xFF}}},
 	{{{-38, -408, 1176},0, {-10074, -10416},{0x7F, 0x0, 0x0, 0xFF}}},
 	{{{-38, -408, 1167},0, {-10074, -10559},{0x7F, 0x0, 0x0, 0xFF}}},
@@ -1401,8 +1401,8 @@ Vtx newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_1[80] = {
 	{{{-48, -408, 747},0, {-10234, -17352},{0x0, 0x7F, 0x0, 0xFF}}},
 };
 
-Gfx newmarket_dl_Floor_001_mesh_layer_Opaque_tri_1[] = {
-	gsSPVertex(newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_1 + 0, 32, 0),
+Gfx newmarket_dl_Floor_Entrance_mesh_layer_Opaque_tri_1[] = {
+	gsSPVertex(newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_1 + 0, 32, 0),
 	gsSP2Triangles(0, 1, 2, 0, 3, 4, 5, 0),
 	gsSP2Triangles(6, 7, 8, 0, 9, 10, 11, 0),
 	gsSP2Triangles(12, 13, 14, 0, 15, 16, 17, 0),
@@ -1410,7 +1410,7 @@ Gfx newmarket_dl_Floor_001_mesh_layer_Opaque_tri_1[] = {
 	gsSP2Triangles(22, 23, 24, 0, 2, 25, 24, 0),
 	gsSP2Triangles(26, 27, 28, 0, 29, 20, 30, 0),
 	gsSP1Triangle(29, 30, 31, 0),
-	gsSPVertex(newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_1 + 32, 32, 0),
+	gsSPVertex(newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_1 + 32, 32, 0),
 	gsSP2Triangles(0, 1, 2, 0, 1, 3, 2, 0),
 	gsSP2Triangles(1, 4, 3, 0, 1, 5, 4, 0),
 	gsSP2Triangles(6, 3, 4, 0, 6, 7, 3, 0),
@@ -1422,7 +1422,7 @@ Gfx newmarket_dl_Floor_001_mesh_layer_Opaque_tri_1[] = {
 	gsSP2Triangles(19, 22, 21, 0, 21, 23, 16, 0),
 	gsSP2Triangles(24, 25, 26, 0, 25, 24, 27, 0),
 	gsSP2Triangles(28, 25, 27, 0, 29, 30, 31, 0),
-	gsSPVertex(newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_1 + 64, 16, 0),
+	gsSPVertex(newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_1 + 64, 16, 0),
 	gsSP2Triangles(0, 1, 2, 0, 2, 3, 0, 0),
 	gsSP2Triangles(2, 4, 3, 0, 4, 5, 3, 0),
 	gsSP2Triangles(3, 6, 0, 0, 7, 8, 9, 0),
@@ -1432,7 +1432,7 @@ Gfx newmarket_dl_Floor_001_mesh_layer_Opaque_tri_1[] = {
 	gsSPEndDisplayList(),
 };
 
-Vtx newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_2[26] = {
+Vtx newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_2[26] = {
 	{{{367, -408, 395},0, {4051, -2409},{0x0, 0x7F, 0x0, 0xFF}}},
 	{{{144, -408, 395},0, {2248, -2412},{0x0, 0x7F, 0x0, 0xFF}}},
 	{{{146, -408, 640},0, {2248, -433},{0x0, 0x7F, 0x0, 0xFF}}},
@@ -1461,8 +1461,8 @@ Vtx newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_2[26] = {
 	{{{-135, -408, 191},0, {1560, -1867},{0x0, 0x7F, 0x0, 0xFF}}},
 };
 
-Gfx newmarket_dl_Floor_001_mesh_layer_Opaque_tri_2[] = {
-	gsSPVertex(newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_2 + 0, 26, 0),
+Gfx newmarket_dl_Floor_Entrance_mesh_layer_Opaque_tri_2[] = {
+	gsSPVertex(newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_2 + 0, 26, 0),
 	gsSP2Triangles(0, 1, 2, 0, 2, 3, 0, 0),
 	gsSP2Triangles(3, 4, 0, 0, 5, 6, 7, 0),
 	gsSP2Triangles(8, 5, 7, 0, 7, 9, 8, 0),
@@ -1474,15 +1474,15 @@ Gfx newmarket_dl_Floor_001_mesh_layer_Opaque_tri_2[] = {
 	gsSPEndDisplayList(),
 };
 
-Vtx newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_3[4] = {
+Vtx newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_3[4] = {
 	{{{-135, -408, 191},0, {1560, -1867},{0x0, 0x7F, 0x0, 0xFF}}},
 	{{{-135, -408, 316},0, {1560, -606},{0x0, 0x7F, 0x0, 0xFF}}},
 	{{{-111, -408, 316},0, {1804, -603},{0x0, 0x7F, 0x0, 0xFF}}},
 	{{{-111, -408, 191},0, {1804, -1867},{0x0, 0x7F, 0x0, 0xFF}}},
 };
 
-Gfx newmarket_dl_Floor_001_mesh_layer_Opaque_tri_3[] = {
-	gsSPVertex(newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_3 + 0, 4, 0),
+Gfx newmarket_dl_Floor_Entrance_mesh_layer_Opaque_tri_3[] = {
+	gsSPVertex(newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_3 + 0, 4, 0),
 	gsSP2Triangles(0, 1, 2, 0, 0, 2, 3, 0),
 	gsSPEndDisplayList(),
 };
@@ -4708,18 +4708,18 @@ Gfx newmarket_dl_spot15_room_0DL_008728_mesh_001_mesh_layer_Opaque[] = {
 	gsSPEndDisplayList(),
 };
 
-Gfx newmarket_dl_Floor_001_mesh_layer_Opaque[] = {
+Gfx newmarket_dl_Floor_Entrance_mesh_layer_Opaque[] = {
 	gsSPClearGeometryMode(G_LIGHTING),
-	gsSPVertex(newmarket_dl_Floor_001_mesh_layer_Opaque_vtx_cull + 0, 8, 0),
+	gsSPVertex(newmarket_dl_Floor_Entrance_mesh_layer_Opaque_vtx_cull + 0, 8, 0),
 	gsSPCullDisplayList(0, 7),
 	gsSPDisplayList(mat_newmarket_dl_f3d_stonepath_layerOpaque),
-	gsSPDisplayList(newmarket_dl_Floor_001_mesh_layer_Opaque_tri_0),
+	gsSPDisplayList(newmarket_dl_Floor_Entrance_mesh_layer_Opaque_tri_0),
 	gsSPDisplayList(mat_newmarket_dl_f3d_stonefloor_layerOpaque),
-	gsSPDisplayList(newmarket_dl_Floor_001_mesh_layer_Opaque_tri_1),
+	gsSPDisplayList(newmarket_dl_Floor_Entrance_mesh_layer_Opaque_tri_1),
 	gsSPDisplayList(mat_newmarket_dl_f3d_grass_layerOpaque),
-	gsSPDisplayList(newmarket_dl_Floor_001_mesh_layer_Opaque_tri_2),
+	gsSPDisplayList(newmarket_dl_Floor_Entrance_mesh_layer_Opaque_tri_2),
 	gsSPDisplayList(mat_newmarket_dl_f3d_black_layerOpaque),
-	gsSPDisplayList(newmarket_dl_Floor_001_mesh_layer_Opaque_tri_3),
+	gsSPDisplayList(newmarket_dl_Floor_Entrance_mesh_layer_Opaque_tri_3),
 	gsSPEndDisplayList(),
 };
 
